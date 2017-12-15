@@ -1,0 +1,10 @@
+.idea/
+node_modules/
+lib/
+temp/
+dist/
+*.swp
+.*.swp
+output/
+*.log
+.DS_Store
