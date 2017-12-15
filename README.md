@@ -1,6 +1,6 @@
-# utilities
+# monofile-utilities
 
-A misc package include some utility functions.
+A misc package include some utility functions/classes.
 
 ## Contents
 
