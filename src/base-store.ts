@@ -11,6 +11,7 @@
 import { action, observable } from 'mobx'
 import { FormEvent } from 'react'
 import { AMap, MMap } from './map'
+import { nonenumerable } from './nonenumerable'
 import memoize = require('lodash/memoize')
 
 export interface ValidateConfig {
@@ -131,7 +132,7 @@ export class BaseStore {
     return this.__changes__
   }
 
-  attr: (data: Partial<this> | void) => this = attr as any
+  @nonenumerable attr: (data: Partial<this> | void) => this = attr as any
 }
 
 export interface Store<T> {
