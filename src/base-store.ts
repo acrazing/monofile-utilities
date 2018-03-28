@@ -145,16 +145,23 @@ const set = action(function <S, K extends keyof S>(this: S, key: K, value: S[K])
   this[key] = value
 })
 
+function check<T>(value: T | undefined | void | null, dft: T): T {
+  if (value === void 0 || value === null) {
+    return dft
+  }
+  return value
+}
+
 const attr = action(function <S>(this: S, data: Partial<S> | void) {
   if (data) {
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         switch (typeof this[key]) {
           case 'number':
-            this[key] = +data[key] as any
+            this[key] = +check(data[key] as any, 0) as any
             break
           case 'string':
-            this[key] = data[key] + '' as any
+            this[key] = check(data[key] as any, '') as any
             break
           default:
             this[key] = data[key] as any
