@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "A utilities library for some misc functions.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
