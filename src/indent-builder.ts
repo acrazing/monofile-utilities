@@ -9,27 +9,27 @@
  */
 
 export class IndentBuilder {
-  private prefix = ''
+  private prefix = '';
 
-  content = ''
+  content = '';
 
   constructor(readonly element = '  ') {
   }
 
   indent() {
-    this.prefix += this.element
-    return this
+    this.prefix += this.element;
+    return this;
   }
 
   push(...lines: string[]) {
     for (const line of lines) {
-      this.content += this.prefix + line + '\n'
+      this.content += this.prefix + line + '\n';
     }
-    return this
+    return this;
   }
 
   undent() {
-    this.prefix = this.prefix.substr(0, this.prefix.length - this.element.length)
-    return this
+    this.prefix = this.prefix.substr(0, this.prefix.length - this.element.length);
+    return this;
   }
 }

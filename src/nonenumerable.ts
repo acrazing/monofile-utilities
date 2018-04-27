@@ -9,53 +9,68 @@
  */
 
 export function nonenumerable(p: any, key: string, desc?: PropertyDescriptor): any {
-  desc = desc || Object.getOwnPropertyDescriptor(p, key)
-  let pValue: any
+  console.log(
+    'decorate',
+    p,
+    key,
+    desc,
+    Object.getOwnPropertyDescriptor(
+      p,
+      key,
+    ), desc && desc.get && desc.get.toString(), desc && desc.set && desc.set.toString(),
+  );
+  desc = desc || Object.getOwnPropertyDescriptor(p, key);
+  let pValue: any;
   if (desc) {
-    desc.enumerable = false
-    const { get, set } = desc
-    pValue = desc.value
+    desc.enumerable = false;
+    const { get, set } = desc;
+    pValue = desc.value;
     desc.set = function (value) {
-      set && set.call(this, value)
+      console.log('set 2', key, value, pValue, this === p, typeof set);
+      set && set.call(this, value);
       if (this === p) {
-        pValue = value
-        return
+        pValue = value;
+        return;
       }
-      const instDesc = Object.getOwnPropertyDescriptor(this, key)
+      const instDesc = Object.getOwnPropertyDescriptor(this, key);
       if (instDesc) {
-        instDesc.enumerable = false
-        Object.defineProperty(this, key, instDesc)
-      } else {
+        instDesc.enumerable = false;
+        Object.defineProperty(this, key, instDesc);
+      }
+      else {
         Object.defineProperty(this, key, {
           configurable: true,
           enumerable: false,
           writable: true,
           value: value,
-        })
+        });
       }
-    }
+    };
     desc.get = function () {
-      return get ? get.call(this) : pValue
-    }
-    return desc
+      console.log('get 2', key, pValue, this === p);
+      return get ? get.call(this) : pValue;
+    };
+    return desc;
   }
   return {
     enumerable: false,
     configurable: true,
     set(value: any) {
       if (this === p) {
-        pValue = value
-        return
+        pValue = value;
+        return;
       }
+      console.log('set', key, value, pValue, this === p);
       Object.defineProperty(this, key, {
         enumerable: false,
         configurable: true,
         writable: true,
         value: value,
-      })
+      });
     },
     get() {
-      return pValue
+      console.log('get', key, pValue, this === p);
+      return pValue;
     },
-  }
+  };
 }

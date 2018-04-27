@@ -8,23 +8,23 @@
  * @desc append-query.ts
  */
 
-import set = require('lodash/set')
-import { NULL } from './consts'
+import set = require('lodash/set');
+import { NULL } from './consts';
 
 export function parse<T>(query: string): T {
   if (!query) {
-    return {} as any
+    return {} as any;
   }
-  const out: any = {}
+  const out: any = {};
   if (!query) {
-    return out
+    return out;
   }
   query.split('&').forEach((item) => {
-    const [name, value] = item.split('=', 2)
+    const [name, value] = item.split('=', 2);
     // This will replace a.b.c/a[b][c] to {a: {b: {c: <value>}}}
-    set(out, name, decodeURIComponent(value || ''))
-  })
-  return out
+    set(out, name, decodeURIComponent(value || ''));
+  });
+  return out;
 }
 
 /**
@@ -34,23 +34,24 @@ export function parse<T>(query: string): T {
  * @return {string}
  */
 export function stringify(query: any = {}, scope = ''): string {
-  let key: string
-  let value: any
-  let out = ''
+  let key: string;
+  let value: any;
+  let out = '';
   Object.keys(query).forEach((name) => {
-    key = scope ? `${scope}[${name}]` : name
-    value = query[name]
+    key = scope ? `${scope}[${name}]` : name;
+    value = query[name];
     if (value === void 0) {
-      return
+      return;
     }
-    value === NULL && (value = '')
+    value === NULL && (value = '');
     if (typeof value === 'object') {
-      out += stringify(value, key)
-    } else {
-      out += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      out += stringify(value, key);
     }
-  })
-  return scope ? out : out.substr(1)
+    else {
+      out += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    }
+  });
+  return scope ? out : out.substr(1);
 }
 
 /**
@@ -61,7 +62,7 @@ export function stringify(query: any = {}, scope = ''): string {
  */
 export function appendQuery(link: string, query: any) {
   if (query && typeof query !== 'string') {
-    query = stringify(query)
+    query = stringify(query);
   }
-  return query ? (link + '&' + query).replace(/[&?]+/, '?') : link
+  return query ? (link + '&' + query).replace(/[&?]+/, '?') : link;
 }

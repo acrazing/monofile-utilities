@@ -8,4 +8,4 @@
  * @desc index.ts
  */
 
-export {}
+export {};

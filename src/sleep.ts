@@ -13,24 +13,24 @@ export interface Timer extends Promise<void> {
 }
 
 export function sleep(time: number): Timer {
-  let clear = (): void => void 0
+  let clear = (): void => void 0;
   const timer = new Promise((resolve, reject) => {
-    let state = 'pending'
+    let state = 'pending';
     const handle = setTimeout(() => {
       if (state === 'pending') {
-        state = 'fulfilled'
-        resolve()
+        state = 'fulfilled';
+        resolve();
       }
-    }, time)
+    }, time);
     clear = () => {
       if (state === 'pending') {
-        state = 'rejected'
-        clearTimeout(handle)
-        reject()
+        state = 'rejected';
+        clearTimeout(handle);
+        reject();
       }
-    }
-  }) as Timer
-  timer.clear = clear
-  return timer
+    };
+  }) as Timer;
+  timer.clear = clear;
+  return timer;
 }
 

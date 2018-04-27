@@ -10,8 +10,8 @@
 
 export const F = {
   date: (value: string) => {
-    const [year, month, day] = value.split('-').map((item) => +item)
-    console.log(year, month, day)
-    return +new Date(year, month - 1, day)
+    const [year, month, day] = value.split('-').map((item) => +item);
+    console.log(year, month, day);
+    return +new Date(year, month - 1, day);
   },
-}
+};

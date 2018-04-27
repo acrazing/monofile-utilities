@@ -9,5 +9,5 @@
  */
 
 export function windowOffsetY() {
-  return window.scrollY || document.documentElement.scrollTop
+  return window.scrollY || document.documentElement.scrollTop;
 }

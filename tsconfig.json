@@ -8,7 +8,9 @@
     "lib": [
       "dom",
       "es5",
-      "es2015.promise"
+      "es2015.promise",
+      "es2015.symbol.wellknown",
+      "es2015.core"
     ],
     "allowJs": false,
     "checkJs": false,
@@ -32,6 +34,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
   }
 }

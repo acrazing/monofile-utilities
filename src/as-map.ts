@@ -8,21 +8,22 @@
  * @desc as-map.ts
  */
 
-import { AMap } from './map'
+import { AMap } from './map';
 
 export function asMap<T>(source: T[], key: keyof T | void): AMap<T> {
   if (!source) {
-    return {}
+    return {};
   }
-  const map: AMap<T> = {}
+  const map: AMap<T> = {};
   if (!key) {
     source.forEach((item) => {
-      source[item as any] = item
-    })
-  } else {
-    source.forEach((item) => {
-      map[item[key] as any] = item
-    })
+      source[item as any] = item;
+    });
   }
-  return map
+  else {
+    source.forEach((item) => {
+      map[item[key] as any] = item;
+    });
+  }
+  return map;
 }

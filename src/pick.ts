@@ -9,9 +9,9 @@
  */
 
 export function pick<T, K extends keyof T>(data: T, ...keys: K[]): Pick<T, K> {
-  const out: any = {}
+  const out: any = {};
   keys.forEach((item) => {
-    out[item] = data[item]
-  })
-  return out
+    out[item] = data[item];
+  });
+  return out;
 }

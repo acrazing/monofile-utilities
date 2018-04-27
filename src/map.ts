@@ -8,8 +8,8 @@
  * @desc map.ts
  */
 
-import { __assign } from 'tslib'
-import { ANY } from './consts'
+import { __assign } from 'tslib';
+import { ANY } from './consts';
 
 // all map
 export interface AMap<T> {
@@ -30,9 +30,9 @@ export interface SMap<T> {
 export type MMap<M, T> = {[K in keyof M]: T }
 
 export function createMap<T, O = AMap<T>>(initial?: O): O {
-  const root: any = {}
-  root['__'] = ANY
-  delete root['__']
-  __assign(root, initial)
-  return root
+  const root: any = {};
+  root['__'] = ANY;
+  delete root['__'];
+  __assign(root, initial);
+  return root;
 }

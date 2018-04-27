@@ -8,17 +8,17 @@
  * @desc misc.ts
  */
 
-import { SyntheticEvent } from 'react'
+import { SyntheticEvent } from 'react';
 
 export function locally(e: SyntheticEvent<any>) {
-  e.stopPropagation()
+  e.stopPropagation();
 }
 
 export function manually(e: SyntheticEvent<any>) {
-  e.preventDefault()
+  e.preventDefault();
 }
 
 export function killed(e: SyntheticEvent<any> | Event) {
-  e.stopPropagation()
-  e.preventDefault()
+  e.stopPropagation();
+  e.preventDefault();
 }

@@ -13,19 +13,14 @@ export interface Deferred<T> extends Promise<T> {
   reject(reason: any): void;
 }
 
-export interface DeferredConstructor {
-  <T>(): Deferred<T>;
-  new <T>(): Deferred<T>;
-}
-
-export const Deferred: DeferredConstructor = function <T>() {
-  let _resolve: any
-  let _reject: any
+export function defer<T>(): Deferred<T> {
+  let _resolve: any = void 0;
+  let _reject: any = void 0;
   const output = new Promise<T>((resolve, reject) => {
-    _resolve = resolve
-    _reject = reject
-  }) as  Deferred<T>
-  output.resolve = _resolve
-  output.reject = _reject
-  return output
-} as any
+    _resolve = resolve;
+    _reject = reject;
+  }) as  Deferred<T>;
+  output.resolve = _resolve;
+  output.reject = _reject;
+  return output;
+}
