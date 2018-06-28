@@ -71,7 +71,12 @@ function normalizeProto(p: any, prev: SMap<string> = {}): SMap<string> {
   }
   // deep first
   normalizeProto(Object.getPrototypeOf(p), prev);
-  return Object.keys(p).reduce((previousValue, currentValue) => {
+  const isFunc = typeof p === 'function';
+  return Object.keys(p).filter((name) => {
+    return isFunc
+      ? ['length', 'prototype', 'name'].indexOf(name) === -1
+      : ['constructor'].indexOf(name) === -1;
+  }).reduce((previousValue, currentValue) => {
     previousValue[normalizeName(currentValue)] = currentValue;
     return previousValue;
   }, prev);
