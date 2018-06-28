@@ -10,12 +10,6 @@
   version "9.6.5"
   resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-9.6.5.tgz#ee700810fdf49ac1c399fc5980b7559b3e5a381d"
 
-"@types/react@^16.3.11":
-  version "16.3.11"
-  resolved "http://registry.npm.taobao.org/@types/react/download/@types/react-16.3.11.tgz#345a17f1c96420f10b9f0dc696c31091ff9d66ea"
-  dependencies:
-    csstype "^2.2.0"
-
 "@types/yargs@^11.0.0":
   version "11.0.0"
   resolved "http://registry.npm.taobao.org/@types/yargs/download/@types/yargs-11.0.0.tgz#124b9ed9c65b7091cc36da59ae12cbd47d8745ea"
@@ -51,10 +45,6 @@ cross-spawn@^5.0.1:
     lru-cache "^4.0.1"
     shebang-command "^1.2.0"
     which "^1.2.9"
-
-csstype@^2.2.0:
-  version "2.2.0"
-  resolved "http://registry.npm.taobao.org/csstype/download/csstype-2.2.0.tgz#1656ef97553ac53b77090844a2531c6660ebd902"
 
 decamelize@^1.1.1:
   version "1.2.0"
@@ -141,10 +131,6 @@ mem@^1.1.0:
 mimic-fn@^1.0.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/mimic-fn/download/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
-
-mobx@^4.2.0:
-  version "4.2.0"
-  resolved "http://registry.npm.taobao.org/mobx/download/mobx-4.2.0.tgz#ee0b0a4f3da2f4776225046ab208ac329a4841d4"
 
 npm-run-path@^2.0.0:
   version "2.0.2"

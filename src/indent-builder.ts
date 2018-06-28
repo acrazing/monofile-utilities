@@ -9,9 +9,8 @@
  */
 
 export class IndentBuilder {
-  private prefix = '';
-
   content = '';
+  private prefix = '';
 
   constructor(readonly element = '  ') {
   }
@@ -29,7 +28,8 @@ export class IndentBuilder {
   }
 
   undent() {
-    this.prefix = this.prefix.substr(0, this.prefix.length - this.element.length);
+    this.prefix = this.prefix.substr(0, this.prefix.length
+      - this.element.length);
     return this;
   }
 }

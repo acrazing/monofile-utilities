@@ -8,7 +8,11 @@
  * @desc nonenumerable.ts
  */
 
-export function nonenumerable(p: any, key: string, desc?: PropertyDescriptor): any {
+export function nonenumerable(
+  p: any,
+  key: string,
+  desc?: PropertyDescriptor,
+): any {
   desc = desc || Object.getOwnPropertyDescriptor(p, key);
   let pValue: any;
   if (desc) {

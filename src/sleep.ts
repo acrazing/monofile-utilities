@@ -8,13 +8,15 @@
  * @desc sleep.ts
  */
 
+import { ANY } from './consts';
+
 export interface Timer extends Promise<void> {
-  clear(): void;
+  interrupt(resolve?: boolean): void;
 }
 
 export function sleep(time: number): Timer {
-  let clear = (): void => void 0;
-  const timer = new Promise((resolve, reject) => {
+  let clear: Timer['interrupt'] = ANY;
+  const timer = <Timer>new Promise((resolve, reject) => {
     let state = 'pending';
     const handle = setTimeout(() => {
       if (state === 'pending') {
@@ -22,15 +24,20 @@ export function sleep(time: number): Timer {
         resolve();
       }
     }, time);
-    clear = () => {
+    clear = (_resolve?: boolean) => {
       if (state === 'pending') {
         state = 'rejected';
         clearTimeout(handle);
-        reject();
+        if (_resolve === true) {
+          resolve(void 0);
+        }
+        else {
+          reject();
+        }
       }
     };
-  }) as Timer;
-  timer.clear = clear;
+  });
+  timer.interrupt = clear;
   return timer;
 }
 

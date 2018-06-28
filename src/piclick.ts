@@ -9,7 +9,24 @@
  */
 
 import yargs = require('yargs');
+import { Argv } from 'yargs';
+import { ANY } from './consts';
 import { SMap } from './map';
+
+const kArgvOptions = '__piclick_argv_options__';
+
+export function argv(opts: Argv) {
+  return (target: any, propertyKey: string) => {
+    if (!target.hasOwnProperty(kArgvOptions)) {
+      Object.defineProperty(target, kArgvOptions, {
+        configurable: false,
+        enumerable: false,
+        value: Object.create(target[kArgvOptions] || null),
+      });
+    }
+    target[kArgvOptions][propertyKey] = opts;
+  };
+}
 
 function normalizeName(name: string) {
   return name.replace(/_/g, '-')
@@ -20,18 +37,18 @@ function normalizeName(name: string) {
 function error(reason: string, commands: SMap<any>) {
   process.stderr.write(
     `ERROR: ${reason}\n\nAvailable commands:\n`
-    + Object.keys(commands).map((name) => {
+    + Object.keys(commands).sort().map((name) => {
       const actor: any = commands[name];
-      if (typeof actor !== 'function' || Object.getOwnPropertyNames(actor.prototype).length < 2) {
+      if (typeof actor !== 'function') {
         return `- ${name}\n`;
       }
-      let output = '';
-      if ('main' in actor.prototype) {
-        output = `- ${name}\n`;
+      let output = `- ${name}\n`;
+      const subs = normalizeProto(actor, normalizeProto(actor.prototype));
+      if (Object.keys(subs).length === 0) {
+        return output;
       }
-      return output + Object.getOwnPropertyNames(actor.prototype)
-        .filter((name) => name !== 'constructor' && name !== 'main')
-        .map((sub) => `- ${name}.${sub}\n`)
+      return output + Object.keys(subs).sort()
+        .map((sub) => `  - ${name}.${sub}\n`)
         .join('');
     }).join('') + '\n',
   );
@@ -46,6 +63,18 @@ function format(time: number) {
     return (time / 60e3).toFixed(2) + 'm';
   }
   return (time / 36e5).toFixed(2) + 'h';
+}
+
+function normalizeProto(p: any, prev: SMap<string> = {}): SMap<string> {
+  if (p === Object.prototype || !p) {
+    return prev;
+  }
+  // deep first
+  normalizeProto(Object.getPrototypeOf(p), prev);
+  return Object.keys(p).reduce((previousValue, currentValue) => {
+    previousValue[normalizeName(currentValue)] = currentValue;
+    return previousValue;
+  }, prev);
 }
 
 export function piclick(module: NodeModule) {
@@ -67,36 +96,59 @@ export function piclick(module: NodeModule) {
   if (!commands.hasOwnProperty(cmd)) {
     error(`Could not find the command \`${cmd}\``, commands);
   }
-  let actor: any = commands[cmd];
+  let actor = commands[cmd];
   if (typeof actor !== 'function') {
     console.log(JSON.stringify(actor), void 0, 2);
     return;
   }
-  if (Object.getOwnPropertyNames(actor.prototype).length > 1) {
+  let opts: Argv = ANY;
+  const staticCmds = normalizeProto(actor);
+  const protoCmds = normalizeProto(actor.prototype);
+  if (
+    // we think it is class, need to check the child command
+    Object.keys(staticCmds).length > 0
+    || Object.keys(protoCmds).length > 0
+  ) {
     let func = 'main';
-    actor = new actor();
     const arg1 = args[0];
     if (arg1 && arg1.charAt(0) !== '-') {
-      func = arg1;
+      func = normalizeName(arg1);
       args.shift();
     }
-    if (!(func in actor)) {
-      error(`Cound not find the command \`${cmd}.${func}\``, commands);
+    if (staticCmds[func]) {
+      opts = actor[kArgvOptions] && actor[kArgvOptions][staticCmds[func]];
+      actor = typeof actor[staticCmds[func]] === 'function'
+        ? actor[staticCmds[func]].bind(actor)
+        : actor[staticCmds[func]];
     }
-    if (typeof actor[func] !== 'function') {
-      console.log(JSON.stringify(actor[func], void 0, 2));
+    else if (protoCmds[func]) {
+      actor = new actor();
+      opts = actor[kArgvOptions] && actor[kArgvOptions][protoCmds[func]];
+      actor = typeof actor[protoCmds[func]] === 'function'
+        ? actor[protoCmds[func]].bind(actor)
+        : actor[protoCmds[func]];
+    }
+    else {
+      error(`Could not find the command \`${cmd}.${func}\``, commands);
+    }
+    if (typeof actor !== 'function') {
+      console.log(JSON.stringify(actor, void 0, 2));
       return;
     }
-    actor = actor[func].bind(actor);
   }
+  const argv = opts === void 0 ? yargs.parse(args) : opts.parse(args);
   process.stderr.write(`Starting command \`${cmd}\`...\n`);
   process.on('exit', (code) => {
     if (code === 0) {
-      process.stderr.write(`Finished successfully in ${format(+new Date - now)}.\n`);
+      process.stderr.write(
+        `Finished successfully in ${format(+new Date - now)}.\n`,
+      );
     }
     else {
-      process.stderr.write(`Process exited with code \`${code}\` in ${format(+new Date - now)}.\n`);
+      process.stderr.write(
+        `Process exited with code \`${code}\` in ${format(+new Date - now)}.\n`,
+      );
     }
   });
-  actor(yargs.parse(args));
+  actor(argv);
 }
