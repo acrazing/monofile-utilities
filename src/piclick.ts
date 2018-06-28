@@ -66,13 +66,16 @@ function format(time: number) {
 }
 
 function normalizeProto(p: any, prev: SMap<string> = {}): SMap<string> {
-  if (p === Object.prototype || !p) {
+  if (p === Object.prototype || p === Function.prototype || !p) {
     return prev;
   }
   // deep first
   normalizeProto(Object.getPrototypeOf(p), prev);
   const isFunc = typeof p === 'function';
-  return Object.keys(p).filter((name) => {
+  return Object.getOwnPropertyNames(p).filter((name) => {
+    if (kArgvOptions === name) {
+      return false;
+    }
     return isFunc
       ? ['length', 'prototype', 'name'].indexOf(name) === -1
       : ['constructor'].indexOf(name) === -1;
