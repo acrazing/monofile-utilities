@@ -10,6 +10,12 @@
   version "9.6.5"
   resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-9.6.5.tgz#ee700810fdf49ac1c399fc5980b7559b3e5a381d"
 
+"@types/react@^16.4.4":
+  version "16.4.4"
+  resolved "http://registry.npm.taobao.org/@types/react/download/@types/react-16.4.4.tgz#ffaa339e41346a7c65ddc914779ae43fa522a39a"
+  dependencies:
+    csstype "^2.2.0"
+
 "@types/yargs@^11.0.0":
   version "11.0.0"
   resolved "http://registry.npm.taobao.org/@types/yargs/download/@types/yargs-11.0.0.tgz#124b9ed9c65b7091cc36da59ae12cbd47d8745ea"
@@ -45,6 +51,10 @@ cross-spawn@^5.0.1:
     lru-cache "^4.0.1"
     shebang-command "^1.2.0"
     which "^1.2.9"
+
+csstype@^2.2.0:
+  version "2.5.5"
+  resolved "http://registry.npm.taobao.org/csstype/download/csstype-2.5.5.tgz#4125484a3d42189a863943f23b9e4b80fedfa106"
 
 decamelize@^1.1.1:
   version "1.2.0"
