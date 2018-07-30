@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "1.7.3",
+  "version": "1.8.0",
   "description": "A utilities library for some misc functions.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -32,15 +32,17 @@
   ],
   "homepage": "https://github.com/acrazing/utilities#readme",
   "dependencies": {
-    "@types/lodash": "^4.14.107",
-    "@types/node": "^9.6.5",
-    "@types/react": "^16.4.4",
-    "@types/yargs": "^11.0.0",
-    "lodash": "^4.17.5",
-    "tslib": "^1.9.0",
-    "yargs": "^11.0.0"
+    "@types/lodash": "*",
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/yargs": "*",
+    "lodash": "*",
+    "tslib": "*",
+    "yargs": "*"
   },
   "devDependencies": {
-    "typescript": "^2.8.1"
+    "typescript": "*"
+  },
+  "peerDependencies": {
   }
 }

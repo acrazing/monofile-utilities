@@ -1,25 +1,19 @@
 {
-  "include": [
-    "./src"
-  ],
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "lib": [
-      "dom",
       "es5",
-      "es2015.promise",
-      "es2015.symbol.wellknown",
-      "es2015.core"
+      "es2015",
+      "dom"
     ],
     "allowJs": false,
-    "checkJs": false,
     "jsx": "react",
     "declaration": true,
     "sourceMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
-    "removeComments": true,
+    "removeComments": false,
     "noEmit": false,
     "importHelpers": true,
     "downlevelIteration": true,
@@ -27,6 +21,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
@@ -34,7 +29,13 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false
-  }
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.d.ts"
+  ]
 }
