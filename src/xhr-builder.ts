@@ -4,14 +4,14 @@
  */
 
 import { noop } from './consts'
+import { isBlob, isFormData, isTypedArray } from './is'
 import { SMap } from './map'
-import { appendQuery } from './query-string'
-import { stringifyBodyJSON } from './stringify-body-json'
+import { appendQuery, stringify } from './query-string'
 
 export interface RequestOptions {
   headers?: SMap<string>;
   dropQuery?: true | false | 'query' | 'body';
-  stringifyBody?(input: any): [string, any];
+  contentType?: 'application/json' | 'application/x-www-form-urlencoded';
   handleUnexpectedStatus?(xhr: XMLHttpRequest): XhrError
   parseResponseText?(text: string): any
   handleResponseData?(data: any): any
@@ -65,11 +65,11 @@ export class XhrError extends Error {
   constructor(status = 0, code = 0, stage: XhrStage = 'init', message = '') {
     super(message)
     Object.setPrototypeOf && Object.setPrototypeOf(this, new.target.prototype)
+    this.name = 'XMLHttpRequestError'
     this.status = status
     this.code = code
     this.stage = stage
     this.message = message
-    this.name = 'XMLHttpRequestError'
   }
 }
 
@@ -81,7 +81,7 @@ export class XhrBuilder {
     host,
     headers = {},
     dropQuery = false,
-    stringifyBody = stringifyBodyJSON,
+    contentType = 'application/json',
     handleUnexpectedStatus = (xhr) => {
       return new XhrError(xhr.status, 0, 'response', 'invalid response status')
     },
@@ -95,7 +95,7 @@ export class XhrBuilder {
     this.config = {
       headers,
       dropQuery,
-      stringifyBody,
+      contentType,
       handleUnexpectedStatus,
       parseResponseText,
       handleResponseData,
@@ -126,7 +126,7 @@ export class XhrBuilder {
       handleResponseData,
       parseResponseText,
       handleUnexpectedStatus,
-      stringifyBody,
+      contentType,
     } = { ...this.config, ...options }
     const headers = { ...this.config.headers, ...options.headers }
     const api = formatUrl(url, dropQuery)
@@ -144,9 +144,24 @@ export class XhrBuilder {
         }
         let bodyData: any = null
         if (withBody && body) {
-          let contentType: string
-          [contentType, bodyData] = stringifyBody(body)
-          xhr.setRequestHeader('Content-Type', contentType)
+          let content: string
+          if (isFormData(body)) {
+            bodyData = body
+            content = 'multipart/formdata'
+          } else if (isBlob(body) || isTypedArray(body)) {
+            bodyData = body
+            content = 'application/octet-stream'
+          } else if (typeof body === 'string') {
+            bodyData = body
+            content = 'text/plain'
+          } else if (contentType === 'application/json') {
+            bodyData = JSON.stringify(body)
+            content = contentType
+          } else {
+            bodyData = stringify(body)
+            content = contentType
+          }
+          xhr.setRequestHeader('Content-Type', content)
         }
         xhr.onabort = () => {
           reject(new XhrError(0, 0, 'request', 'aborted'))

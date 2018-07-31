@@ -34,3 +34,18 @@ export function isFile(value: any): value is File {
 export function isFormData(value: any): value is FormData {
   return value instanceof FormData
 }
+
+export type IsTypedArray = (value: any) => value is Int8Array | Int16Array | Int32Array | Uint8Array | Uint8ClampedArray | Uint16Array | Uint32Array | Float32Array | Float64Array
+
+export const isTypedArray: IsTypedArray = (typeof Int8Array === 'function'
+  ? (value: any) => {
+    return value instanceof Int8Array
+      || value instanceof Int16Array
+      || value instanceof Int32Array
+      || value instanceof Uint8Array
+      || value instanceof Uint8ClampedArray
+      || value instanceof Uint16Array
+      || value instanceof Uint32Array
+      || value instanceof Float32Array
+      || value instanceof Float64Array
+  } : () => false) as any
