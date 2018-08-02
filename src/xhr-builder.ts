@@ -129,7 +129,7 @@ export class XhrBuilder {
       contentType,
     } = { ...this.config, ...options }
     const headers = { ...this.config.headers, ...options.headers }
-    const api = formatUrl(url, dropQuery)
+    const api = formatUrl(this.host(url), dropQuery)
     return (input?: any, query?: any) => {
       return new Promise<any>((resolve, reject) => {
         query = withBody ? query : input
@@ -180,7 +180,7 @@ export class XhrBuilder {
           try {
             const raw = parseResponseText(xhr.responseText)
             try {
-              const data = handleResponseData(raw)
+              const data = handleResponseData(raw) || raw
               resolve(data)
             } catch (e) {
               reject(
