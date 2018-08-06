@@ -3,17 +3,17 @@
  * @since 2018-07-30 17:38:17
  */
 
-import { noop } from './consts'
-import { isBlob, isFormData, isTypedArray } from './is'
-import { SMap } from './map'
-import { appendQuery, stringify } from './query-string'
+import { noop } from './consts';
+import { isBlob, isFormData, isTypedArray } from './is';
+import { SMap } from './map';
+import { appendQuery, stringify } from './query-string';
 
 export interface RequestOptions {
   headers?: SMap<string>;
   dropQuery?: true | false | 'query' | 'body';
   contentType?: 'application/json' | 'application/x-www-form-urlencoded';
   handleUnexpectedStatus?(xhr: XMLHttpRequest): XhrError
-  parseResponseText?(text: string): any
+  parseResponseText?(text: string, xhr: XMLHttpRequest): any
   handleResponseData?(data: any): any
 }
 
@@ -30,52 +30,52 @@ function formatUrl(
   if (/{[^}]+}/.test(url)) {
     return (query, body) => {
       return url.replace(/{([^}]+)}/g, (_, $1: string) => {
-        const [name, defaults] = $1.split(':')
+        const [name, defaults] = $1.split(':');
         if (body && name in body) {
-          const value = body[name]
+          const value = body[name];
           if (dropQuery === true || dropQuery === 'body') {
-            delete body[name]
+            delete body[name];
           }
-          return value
+          return value;
         }
         if (query && name in query) {
-          const value = query[name]
+          const value = query[name];
           if (dropQuery === true || dropQuery === 'query') {
-            delete query[name]
+            delete query[name];
           }
-          return value
+          return value;
         }
         if (defaults !== void 0) {
-          return defaults
+          return defaults;
         }
-        throw new Error(`path parameter "${name}" is required!`)
-      })
-    }
+        throw new Error(`path parameter "${name}" is required!`);
+      });
+    };
   }
-  return () => url
+  return () => url;
 }
 
 export class XhrError extends Error {
-  readonly status: number // http response status, >= response
-  readonly code: number // the application error code, >= process
-  readonly stage: XhrStage
-  readonly message: string
-  readonly name: string
+  readonly status: number; // http response status, >= response
+  readonly code: number; // the application error code, >= process
+  readonly stage: XhrStage;
+  readonly message: string;
+  readonly name: string;
 
   constructor(status = 0, code = 0, stage: XhrStage = 'init', message = '') {
-    super(message)
-    Object.setPrototypeOf && Object.setPrototypeOf(this, new.target.prototype)
-    this.name = 'XMLHttpRequestError'
-    this.status = status
-    this.code = code
-    this.stage = stage
-    this.message = message
+    super(message);
+    Object.setPrototypeOf && Object.setPrototypeOf(this, new.target.prototype);
+    this.name = 'XMLHttpRequestError';
+    this.status = status;
+    this.code = code;
+    this.stage = stage;
+    this.message = message;
   }
 }
 
 export class XhrBuilder {
-  readonly host: (url: string) => string
-  readonly config: Required<RequestOptions>
+  readonly host: (url: string) => string;
+  readonly config: Required<RequestOptions>;
 
   constructor({
     host,
@@ -83,15 +83,20 @@ export class XhrBuilder {
     dropQuery = false,
     contentType = 'application/json',
     handleUnexpectedStatus = (xhr) => {
-      return new XhrError(xhr.status, 0, 'response', 'invalid response status')
+      return new XhrError(xhr.status, 0, 'response', 'invalid response status');
     },
-    parseResponseText = JSON.parse.bind(JSON),
+    parseResponseText = (text) => {
+      if (!text) {
+        return void 0;
+      }
+      return JSON.parse(text);
+    },
     handleResponseData = noop,
   }: XhrBuilderOptions) {
     this.host = typeof host === 'function' ? host : (url) => {
       return url.indexOf('http://') === 0 || url.indexOf('https://') === 0
-        ? url : `${host}${url}`
-    }
+        ? url : `${host}${url}`;
+    };
     this.config = {
       headers,
       dropQuery,
@@ -99,7 +104,7 @@ export class XhrBuilder {
       handleUnexpectedStatus,
       parseResponseText,
       handleResponseData,
-    }
+    };
   }
 
   build<O>(
@@ -118,116 +123,116 @@ export class XhrBuilder {
     options?: RequestOptions,
   ): (input: I, query: Q) => Promise<O>
   build(method: string, url: string, options: RequestOptions = {}) {
-    method = method.toLowerCase()
-    const withBody = method === 'post' || method === 'put' || method === 'patch'
-    options.headers = options.headers || {}
+    method = method.toLowerCase();
+    const withBody = method === 'post' || method === 'put' || method === 'patch';
+    options.headers = options.headers || {};
     const {
       dropQuery,
       handleResponseData,
       parseResponseText,
       handleUnexpectedStatus,
       contentType,
-    } = { ...this.config, ...options }
-    const headers = { ...this.config.headers, ...options.headers }
-    const api = formatUrl(this.host(url), dropQuery)
+    } = { ...this.config, ...options };
+    const headers = { ...this.config.headers, ...options.headers };
+    const api = formatUrl(this.host(url), dropQuery);
     return (input?: any, query?: any) => {
       return new Promise<any>((resolve, reject) => {
-        query = withBody ? query : input
-        const body = withBody ? input : void 0
-        const xhr = new XMLHttpRequest()
-        xhr.open(method, appendQuery(api(query, body), query), true)
-        xhr.withCredentials = true
+        query = withBody ? query : input;
+        const body = withBody ? input : void 0;
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, appendQuery(api(query, body), query), true);
+        xhr.withCredentials = true;
         for (const key in headers) {
           if (headers.hasOwnProperty(key)) {
-            xhr.setRequestHeader(key, headers[key])
+            xhr.setRequestHeader(key, headers[key]);
           }
         }
-        let bodyData: any = null
+        let bodyData: any = null;
         if (withBody && body) {
-          let content: string
+          let content: string;
           if (isFormData(body)) {
-            bodyData = body
-            content = 'multipart/formdata'
+            bodyData = body;
+            content = 'multipart/formdata';
           } else if (isBlob(body) || isTypedArray(body)) {
-            bodyData = body
-            content = 'application/octet-stream'
+            bodyData = body;
+            content = 'application/octet-stream';
           } else if (typeof body === 'string') {
-            bodyData = body
-            content = 'text/plain'
+            bodyData = body;
+            content = 'text/plain';
           } else if (contentType === 'application/json') {
-            bodyData = JSON.stringify(body)
-            content = contentType
+            bodyData = JSON.stringify(body);
+            content = contentType;
           } else {
-            bodyData = stringify(body)
-            content = contentType
+            bodyData = stringify(body);
+            content = contentType;
           }
-          xhr.setRequestHeader('Content-Type', content)
+          xhr.setRequestHeader('Content-Type', content);
         }
         xhr.onabort = () => {
-          reject(new XhrError(0, 0, 'request', 'aborted'))
-        }
+          reject(new XhrError(0, 0, 'request', 'aborted'));
+        };
         xhr.ontimeout = () => {
-          reject(new XhrError(0, 0, 'request', 'timeout'))
-        }
+          reject(new XhrError(0, 0, 'request', 'timeout'));
+        };
         xhr.onerror = (err) => {
-          reject(new XhrError(0, 0, 'request', err.message))
-        }
+          reject(new XhrError(0, 0, 'request', err.message));
+        };
         xhr.onload = () => {
           if (xhr.status < 200 || xhr.status > 299) {
-            reject(handleUnexpectedStatus(xhr))
-            return
+            reject(handleUnexpectedStatus(xhr));
+            return;
           }
           try {
-            const raw = parseResponseText(xhr.responseText)
+            const raw = parseResponseText(xhr.responseText, xhr);
             try {
-              const data = handleResponseData(raw) || raw
-              resolve(data)
+              const data = handleResponseData(raw) || raw;
+              resolve(data);
             } catch (e) {
               reject(
                 e instanceof XhrError
                   ? e : new XhrError(xhr.status, 0, 'process', e.message),
-              )
+              );
             }
           } catch (e) {
             reject(
               e instanceof XhrError
                 ? e : new XhrError(xhr.status, 0, 'parse', e.message),
-            )
+            );
           }
-        }
-        xhr.send(bodyData)
+        };
+        xhr.send(bodyData);
       }).catch((e) => {
         if (e instanceof XhrError) {
-          throw e
+          throw e;
         } else {
-          throw new XhrError(0, 0, 'init', e.message)
+          throw new XhrError(0, 0, 'init', e.message);
         }
-      })
-    }
+      });
+    };
   }
 
   get<O>(url: string, options?: RequestOptions): () => Promise<O>
   get<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
   get(url: string, options?: RequestOptions) {
-    return this.build('get', url, options)
+    return this.build('get', url, options);
   }
 
   delete<O>(url: string, options?: RequestOptions): () => Promise<O>
   delete<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
   delete(url: string, options?: RequestOptions) {
-    return this.build('delete', url, options)
+    return this.build('delete', url, options);
   }
 
   head<O>(url: string, options?: RequestOptions): () => Promise<O>
   head<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
   head(url: string, options?: RequestOptions) {
-    return this.build('head', url, options)
+    return this.build('head', url, options);
   }
 
   options<O>(url: string, options?: RequestOptions): () => Promise<O>
   options<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
   options(url: string, options?: RequestOptions) {
-    return this.build('options', url, options)
+    return this.build('options', url, options);
   }
 
   post<O>(url: string, options?: RequestOptions): () => Promise<O>
@@ -237,7 +242,7 @@ export class XhrBuilder {
     query: Q,
   ) => Promise<O>
   post(url: string, options?: RequestOptions) {
-    return this.build('post', url, options)
+    return this.build('post', url, options);
   }
 
   put<O>(url: string, options?: RequestOptions): () => Promise<O>
@@ -247,7 +252,7 @@ export class XhrBuilder {
     query: Q,
   ) => Promise<O>
   put(url: string, options?: RequestOptions) {
-    return this.build('put', url, options)
+    return this.build('put', url, options);
   }
 
   patch<O>(url: string, options?: RequestOptions): () => Promise<O>
@@ -257,6 +262,6 @@ export class XhrBuilder {
     query: Q,
   ) => Promise<O>
   patch(url: string, options?: RequestOptions) {
-    return this.build('patch', url, options)
+    return this.build('patch', url, options);
   }
 }

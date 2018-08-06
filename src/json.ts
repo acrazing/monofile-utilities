@@ -4,5 +4,5 @@
  */
 
 export function evalJSON(content: string): any {
-  return eval(`(${content})`)
+  return eval(`(${content})`);
 }
