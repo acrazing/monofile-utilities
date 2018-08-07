@@ -123,8 +123,8 @@ export class XhrBuilder {
     options?: RequestOptions,
   ): (input: I, query: Q) => Promise<O>
   build(method: string, url: string, options: RequestOptions = {}) {
-    method = method.toLowerCase();
-    const withBody = method === 'post' || method === 'put' || method === 'patch';
+    method = method.toUpperCase();
+    const withBody = method === 'POST' || method === 'PUT' || method === 'PATCH';
     options.headers = options.headers || {};
     const {
       dropQuery,
