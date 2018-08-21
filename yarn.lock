@@ -154,10 +154,6 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/number-is-nan/download/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-object-to-formdata@*:
-  version "1.5.2"
-  resolved "http://registry.npm.taobao.org/object-to-formdata/download/object-to-formdata-1.5.2.tgz#1494cb6970ae17017f390534885af3a32068e34f"
-
 os-locale@^2.0.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/os-locale/download/os-locale-2.1.0.tgz#42bc2900a6b5b8bd17376c8e882b65afccf24bf2"

@@ -4,6 +4,7 @@
  */
 
 import { noop } from './consts';
+import { isIE } from './detect-ie';
 import { isBlob, isFormData, isTypedArray } from './is';
 import { SMap } from './map';
 import { appendQuery, stringify } from './query-string';
@@ -12,6 +13,7 @@ export interface RequestOptions {
   headers?: SMap<string>;
   dropQuery?: true | false | 'query' | 'body';
   contentType?: 'application/json' | 'application/x-www-form-urlencoded';
+  hijackIE?: boolean;
   handleUnexpectedStatus?(xhr: XMLHttpRequest): XhrError
   parseResponseText?(text: string, xhr: XMLHttpRequest): any
   handleResponseData?(data: any): any
@@ -82,6 +84,7 @@ export class XhrBuilder {
     headers = {},
     dropQuery = false,
     contentType = 'application/json',
+    hijackIE = true,
     handleUnexpectedStatus = (xhr) => {
       return new XhrError(xhr.status, 0, 'response', 'invalid response status');
     },
@@ -101,6 +104,7 @@ export class XhrBuilder {
       headers,
       dropQuery,
       contentType,
+      hijackIE,
       handleUnexpectedStatus,
       parseResponseText,
       handleResponseData,
@@ -140,7 +144,11 @@ export class XhrBuilder {
         query = withBody ? query : input;
         const body = withBody ? input : void 0;
         const xhr = new XMLHttpRequest();
-        xhr.open(method, appendQuery(api(query, body), query), true);
+        let url = appendQuery(api(query, body), query);
+        if (this.config.hijackIE && isIE) {
+          url = appendQuery(url, { _: +new Date() });
+        }
+        xhr.open(method, url, true);
         xhr.withCredentials = true;
         for (const key in headers) {
           if (headers.hasOwnProperty(key)) {
