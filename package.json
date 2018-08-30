@@ -1,11 +1,11 @@
 {
   "name": "monofile-utilities",
-  "version": "1.9.5",
+  "version": "1.10.0",
   "description": "A utilities library for some misc functions.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "prepublish": "rm -rf ./lib && tsc",
+    "prepublishOnly": "rm -rf ./lib && tsc",
     "test": "none"
   },
   "repository": {
@@ -43,6 +43,5 @@
   "devDependencies": {
     "typescript": "*"
   },
-  "peerDependencies": {
-  }
+  "peerDependencies": {}
 }

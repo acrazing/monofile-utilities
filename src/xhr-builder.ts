@@ -183,7 +183,7 @@ export class XhrBuilder {
           reject(new XhrError(0, 0, 'request', 'timeout'));
         };
         xhr.onerror = (err) => {
-          reject(new XhrError(0, 0, 'request', err.message));
+          reject(new XhrError(0, 0, 'request', err.toString()));
         };
         xhr.onload = () => {
           if (xhr.status < 200 || xhr.status > 299) {
