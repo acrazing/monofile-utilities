@@ -3,7 +3,7 @@
  * @since 2018-08-21 10:49:08
  */
 
-export function detectIE() {
+export function detectIE () {
   if (typeof window === 'undefined' || !window.navigator || !window.navigator.userAgent) {
     return false;
   }

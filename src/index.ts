@@ -20,7 +20,6 @@ export * from './xhr-builder';
 export * from './types';
 export * from './query-string';
 export * from './is';
-export * from './index';
 export * from './event';
 export * from './nonenumerable';
 export * from './detect-ie';

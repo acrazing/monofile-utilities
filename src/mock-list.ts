@@ -10,7 +10,7 @@
 
 import { __assign } from 'tslib';
 
-export function mockList<T>(model: T, key: keyof T, count = 10): T[] {
+export function mockList<T> (model: T, key: keyof T, count = 10): T[] {
   const out: T[] = [];
   for (let i = 0; i < count; i++) {
     out.push(__assign({}, model, { [key]: i }));

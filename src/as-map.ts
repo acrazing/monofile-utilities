@@ -10,7 +10,7 @@
 
 import { AMap } from './map';
 
-export function asMap<T>(source: T[], key: keyof T | void): AMap<T> {
+export function asMap<T> (source: T[], key: keyof T | void): AMap<T> {
   if (!source) {
     return {};
   }

@@ -8,17 +8,20 @@
  * @desc misc.ts
  */
 
-import { SyntheticEvent } from 'react';
+export interface StopEvent {
+  stopPropagation (): void;
+  preventDefault (): void;
+}
 
-export function locally(e: SyntheticEvent<any>) {
+export function locally (e: StopEvent) {
   e.stopPropagation();
 }
 
-export function manually(e: SyntheticEvent<any>) {
+export function manually (e: StopEvent) {
   e.preventDefault();
 }
 
-export function killed(e: SyntheticEvent<any> | Event) {
+export function killed (e: StopEvent) {
   e.stopPropagation();
   e.preventDefault();
 }

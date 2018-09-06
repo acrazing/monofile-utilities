@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A utilities library for some misc functions.",
   "author": "acrazing <joking.young@gmail.com>",
   "main": "cjs/index.js",
@@ -46,7 +46,6 @@
   "dependencies": {
     "@types/lodash": "*",
     "@types/node": "*",
-    "@types/react": "*",
     "@types/yargs": "*",
     "lodash": "*",
     "tslib": "*",
@@ -56,5 +55,5 @@
     "npm-run-all": "^4.1.3",
     "typescript": "*"
   },
-  "peerDependencies": {}
+  "peerDependencies": { }
 }

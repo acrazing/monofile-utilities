@@ -8,7 +8,7 @@
  * @desc nonenumerable.ts
  */
 
-export function nonenumerable(
+export function nonenumerable (
   p: any,
   key: string,
   desc?: PropertyDescriptor,
@@ -47,7 +47,7 @@ export function nonenumerable(
   return {
     enumerable: false,
     configurable: true,
-    set(value: any) {
+    set (value: any) {
       if (this === p) {
         pValue = value;
         return;
@@ -59,7 +59,7 @@ export function nonenumerable(
         value: value,
       });
     },
-    get() {
+    get () {
       return pValue;
     },
   };

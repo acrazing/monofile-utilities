@@ -11,10 +11,10 @@
 import { ANY } from './consts';
 
 export interface Timer extends Promise<void> {
-  interrupt(resolve?: boolean): void;
+  interrupt (resolve?: boolean): void;
 }
 
-export function sleep(time: number): Timer {
+export function sleep (time: number): Timer {
   let clear: Timer['interrupt'] = ANY;
   const timer = <Timer>new Promise((resolve, reject) => {
     let state = 'pending';

@@ -10,19 +10,6 @@
   version "10.9.4"
   resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
 
-"@types/prop-types@*":
-  version "15.5.5"
-  resolved "http://registry.npm.taobao.org/@types/prop-types/download/@types/prop-types-15.5.5.tgz#17038dd322c2325f5da650a94d5f9974943625e3"
-  dependencies:
-    "@types/react" "*"
-
-"@types/react@*":
-  version "16.4.13"
-  resolved "http://registry.npm.taobao.org/@types/react/download/@types/react-16.4.13.tgz#1385f5dc3486aa493849a32ccce626a817543e28"
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^2.2.0"
-
 "@types/yargs@*":
   version "11.1.1"
   resolved "http://registry.npm.taobao.org/@types/yargs/download/@types/yargs-11.1.1.tgz#2e724257167fd6b615dbe4e54301e65fe597433f"
@@ -123,10 +110,6 @@ cross-spawn@^6.0.4:
     semver "^5.5.0"
     shebang-command "^1.2.0"
     which "^1.2.9"
-
-csstype@^2.2.0:
-  version "2.5.6"
-  resolved "http://registry.npm.taobao.org/csstype/download/csstype-2.5.6.tgz#2ae1db2319642d8b80a668d2d025c6196071e788"
 
 decamelize@^2.0.0:
   version "2.0.0"

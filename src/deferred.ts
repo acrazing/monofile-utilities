@@ -9,11 +9,11 @@
  */
 
 export interface Deferred<T> extends Promise<T> {
-  resolve(data: T): void;
-  reject(reason: any): void;
+  resolve (data: T): void;
+  reject (reason: any): void;
 }
 
-export function defer<T>(): Deferred<T> {
+export function defer<T> (): Deferred<T> {
   let _resolve: any = void 0;
   let _reject: any = void 0;
   const output = new Promise<T>((resolve, reject) => {

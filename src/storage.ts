@@ -18,15 +18,15 @@ export interface StorageOptions {
 }
 
 export interface Storage {
-  get<T>(name: string): T | void;
-  get<T>(name: string, defaults: T): T;
-  get<T>(name: string, defaults: void | undefined): T | void;
-  set(name: string, value: any, opts?: StorageOptions): this;
-  remove(name: string): this;
+  get<T> (name: string): T | void;
+  get<T> (name: string, defaults: T): T;
+  get<T> (name: string, defaults: void | undefined): T | void;
+  set (name: string, value: any, opts?: StorageOptions): this;
+  remove (name: string): this;
 }
 
 export class CookieStorage implements Storage {
-  get<T>(name: string, defaults?: T): T | void {
+  get<T> (name: string, defaults?: T): T | void {
     const key = encodeURIComponent(name);
     const matches = document.cookie.match(
       new RegExp(`(?:^|; )${key.replace(/[.*()]/g, '\\$&')}=([^;]*)`),
@@ -34,12 +34,13 @@ export class CookieStorage implements Storage {
     const result: any = matches ? decodeURIComponent(matches[1]) : defaults;
     try {
       return JSON.parse(result);
-    } catch (e) {
+    }
+    catch (e) {
       return result;
     }
   }
 
-  set(name: string, value: any, opts: StorageOptions = {}): this {
+  set (name: string, value: any, opts: StorageOptions = {}): this {
     typeof value === 'string' || (
       value = JSON.stringify(value)
     );
@@ -73,7 +74,7 @@ export class CookieStorage implements Storage {
     return this;
   }
 
-  remove(name: string): this {
+  remove (name: string): this {
     this.set(name, '', { maxAge: 0 });
     return this;
   }
@@ -86,7 +87,7 @@ export interface LocalData {
 }
 
 export class LocalStorage implements Storage {
-  get<T>(name: string, defaults?: T): T | void {
+  get<T> (name: string, defaults?: T): T | void {
     let result: any = localStorage.getItem(name);
     result === null && (
       result = void 0
@@ -103,12 +104,13 @@ export class LocalStorage implements Storage {
         return defaults;
       }
       return data.data;
-    } catch (e) {
+    }
+    catch (e) {
       return result === void 0 ? defaults : result;
     }
   }
 
-  set(name: string, value: any, opts: StorageOptions = {}): this {
+  set (name: string, value: any, opts: StorageOptions = {}): this {
     const data: LocalData = {
       __: true,
       data: value,
@@ -124,27 +126,28 @@ export class LocalStorage implements Storage {
     return this;
   }
 
-  remove(name: string): this {
+  remove (name: string): this {
     localStorage.removeItem(name);
     return this;
   }
 }
 
 export class NoopStorage implements Storage {
-  get<T>(_name: string, defaults?: T): T | void {
+  get<T> (_name: string, defaults?: T): T | void {
     return defaults;
   }
 
-  set() {
+  set () {
     return this;
   }
 
-  remove() {
+  remove () {
     return this;
   }
 }
 
-export const hasLocal = !!window.localStorage
+export const hasLocal = typeof window !== 'undefined'
+  && !!window.localStorage
   && !!window.localStorage.getItem
   && !!window.localStorage.setItem
   && !!window.localStorage.removeItem;

@@ -8,7 +8,7 @@
  * @desc pick.ts
  */
 
-export function pick<T, K extends keyof T>(data: T, ...keys: K[]): Pick<T, K> {
+export function pick<T, K extends keyof T> (data: T, ...keys: K[]): Pick<T, K> {
   const out: any = {};
   keys.forEach((item) => {
     out[item] = data[item];

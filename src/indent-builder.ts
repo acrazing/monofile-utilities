@@ -12,22 +12,22 @@ export class IndentBuilder {
   content = '';
   private prefix = '';
 
-  constructor(readonly element = '  ') {
+  constructor (readonly element = '  ') {
   }
 
-  indent() {
+  indent () {
     this.prefix += this.element;
     return this;
   }
 
-  push(...lines: string[]) {
+  push (...lines: string[]) {
     for (const line of lines) {
       this.content += this.prefix + line + '\n';
     }
     return this;
   }
 
-  undent() {
+  undent () {
     this.prefix = this.prefix.substr(0, this.prefix.length
       - this.element.length);
     return this;

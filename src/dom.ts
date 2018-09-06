@@ -8,6 +8,6 @@
  * @desc offset.ts
  */
 
-export function windowOffsetY() {
+export function windowOffsetY () {
   return window.scrollY || document.documentElement.scrollTop;
 }

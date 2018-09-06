@@ -14,9 +14,9 @@ export interface RequestOptions {
   dropQuery?: true | false | 'query' | 'body';
   contentType?: 'application/json' | 'application/x-www-form-urlencoded';
   hijackIE?: boolean;
-  handleUnexpectedStatus?(xhr: XMLHttpRequest): XhrError
-  parseResponseText?(text: string, xhr: XMLHttpRequest): any
-  handleResponseData?(data: any): any
+  handleUnexpectedStatus? (xhr: XMLHttpRequest): XhrError
+  parseResponseText? (text: string, xhr: XMLHttpRequest): any
+  handleResponseData? (data: any): any
 }
 
 export interface XhrBuilderOptions extends RequestOptions {
@@ -25,7 +25,7 @@ export interface XhrBuilderOptions extends RequestOptions {
 
 export type XhrStage = 'init' | 'request' | 'response' | 'parse' | 'process'
 
-function formatUrl(
+function formatUrl (
   url: string,
   dropQuery: RequestOptions['dropQuery'],
 ): (query: any, body: any) => string {
@@ -64,7 +64,7 @@ export class XhrError extends Error {
   readonly message: string;
   readonly name: string;
 
-  constructor(status = 0, code = 0, stage: XhrStage = 'init', message = '') {
+  constructor (status = 0, code = 0, stage: XhrStage = 'init', message = '') {
     super(message);
     Object.setPrototypeOf && Object.setPrototypeOf(this, new.target.prototype);
     this.name = 'XMLHttpRequestError';
@@ -79,7 +79,7 @@ export class XhrBuilder {
   readonly host: (url: string) => string;
   readonly config: Required<RequestOptions>;
 
-  constructor({
+  constructor ({
     host,
     headers = {},
     dropQuery = false,
@@ -111,22 +111,22 @@ export class XhrBuilder {
     };
   }
 
-  build<O>(
+  build<O> (
     method: string,
     url: string,
     options?: RequestOptions,
   ): () => Promise<O>
-  build<I, O>(
+  build<I, O> (
     method: string,
     url: string,
     options?: RequestOptions,
   ): (input: I) => Promise<O>
-  build<I, O, Q>(
+  build<I, O, Q> (
     method: string,
     url: string,
     options?: RequestOptions,
   ): (input: I, query: Q) => Promise<O>
-  build(method: string, url: string, options: RequestOptions = {}) {
+  build (method: string, url: string, options: RequestOptions = {}) {
     method = method.toUpperCase();
     const withBody = method === 'POST' || method === 'PUT' || method === 'PATCH';
     options.headers = options.headers || {};
@@ -161,16 +161,20 @@ export class XhrBuilder {
           if (isFormData(body)) {
             bodyData = body;
             content = 'multipart/formdata';
-          } else if (isBlob(body) || isTypedArray(body)) {
+          }
+          else if (isBlob(body) || isTypedArray(body)) {
             bodyData = body;
             content = 'application/octet-stream';
-          } else if (typeof body === 'string') {
+          }
+          else if (typeof body === 'string') {
             bodyData = body;
             content = 'text/plain';
-          } else if (contentType === 'application/json') {
+          }
+          else if (contentType === 'application/json') {
             bodyData = JSON.stringify(body);
             content = contentType;
-          } else {
+          }
+          else {
             bodyData = stringify(body);
             content = contentType;
           }
@@ -195,13 +199,15 @@ export class XhrBuilder {
             try {
               const data = handleResponseData(raw) || raw;
               resolve(data);
-            } catch (e) {
+            }
+            catch (e) {
               reject(
                 e instanceof XhrError
                   ? e : new XhrError(xhr.status, 0, 'process', e.message),
               );
             }
-          } catch (e) {
+          }
+          catch (e) {
             reject(
               e instanceof XhrError
                 ? e : new XhrError(xhr.status, 0, 'parse', e.message),
@@ -212,64 +218,68 @@ export class XhrBuilder {
       }).catch((e) => {
         if (e instanceof XhrError) {
           throw e;
-        } else {
+        }
+        else {
           throw new XhrError(0, 0, 'init', e.message);
         }
       });
     };
   }
 
-  get<O>(url: string, options?: RequestOptions): () => Promise<O>
-  get<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
-  get(url: string, options?: RequestOptions) {
+  get<O> (url: string, options?: RequestOptions): () => Promise<O>
+  get<I, O> (url: string, options?: RequestOptions): (input: I) => Promise<O>
+  get (url: string, options?: RequestOptions) {
     return this.build('get', url, options);
   }
 
-  delete<O>(url: string, options?: RequestOptions): () => Promise<O>
-  delete<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
-  delete(url: string, options?: RequestOptions) {
+  delete<O> (url: string, options?: RequestOptions): () => Promise<O>
+  delete<I, O> (url: string, options?: RequestOptions): (input: I) => Promise<O>
+  delete (url: string, options?: RequestOptions) {
     return this.build('delete', url, options);
   }
 
-  head<O>(url: string, options?: RequestOptions): () => Promise<O>
-  head<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
-  head(url: string, options?: RequestOptions) {
+  head<O> (url: string, options?: RequestOptions): () => Promise<O>
+  head<I, O> (url: string, options?: RequestOptions): (input: I) => Promise<O>
+  head (url: string, options?: RequestOptions) {
     return this.build('head', url, options);
   }
 
-  options<O>(url: string, options?: RequestOptions): () => Promise<O>
-  options<I, O>(url: string, options?: RequestOptions): (input: I) => Promise<O>
-  options(url: string, options?: RequestOptions) {
+  options<O> (url: string, options?: RequestOptions): () => Promise<O>
+  options<I, O> (
+    url: string,
+    options?: RequestOptions,
+  ): (input: I) => Promise<O>
+  options (url: string, options?: RequestOptions) {
     return this.build('options', url, options);
   }
 
-  post<O>(url: string, options?: RequestOptions): () => Promise<O>
-  post<B, O>(url: string, options?: RequestOptions): (body: B) => Promise<O>
-  post<B, Q, O>(url: string, options?: RequestOptions): (
+  post<O> (url: string, options?: RequestOptions): () => Promise<O>
+  post<B, O> (url: string, options?: RequestOptions): (body: B) => Promise<O>
+  post<B, Q, O> (url: string, options?: RequestOptions): (
     body: B,
     query: Q,
   ) => Promise<O>
-  post(url: string, options?: RequestOptions) {
+  post (url: string, options?: RequestOptions) {
     return this.build('post', url, options);
   }
 
-  put<O>(url: string, options?: RequestOptions): () => Promise<O>
-  put<B, O>(url: string, options?: RequestOptions): (body: B) => Promise<O>
-  put<B, Q, O>(url: string, options?: RequestOptions): (
+  put<O> (url: string, options?: RequestOptions): () => Promise<O>
+  put<B, O> (url: string, options?: RequestOptions): (body: B) => Promise<O>
+  put<B, Q, O> (url: string, options?: RequestOptions): (
     body: B,
     query: Q,
   ) => Promise<O>
-  put(url: string, options?: RequestOptions) {
+  put (url: string, options?: RequestOptions) {
     return this.build('put', url, options);
   }
 
-  patch<O>(url: string, options?: RequestOptions): () => Promise<O>
-  patch<B, O>(url: string, options?: RequestOptions): (body: B) => Promise<O>
-  patch<B, Q, O>(url: string, options?: RequestOptions): (
+  patch<O> (url: string, options?: RequestOptions): () => Promise<O>
+  patch<B, O> (url: string, options?: RequestOptions): (body: B) => Promise<O>
+  patch<B, Q, O> (url: string, options?: RequestOptions): (
     body: B,
     query: Q,
   ) => Promise<O>
-  patch(url: string, options?: RequestOptions) {
+  patch (url: string, options?: RequestOptions) {
     return this.build('patch', url, options);
   }
 }

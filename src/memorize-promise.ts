@@ -10,19 +10,20 @@ export type MemorizeMode = 'parallel' | 'once-success' | 'once'
 
 export interface Memorize<T> {
   cache: SMap<Promise<T> | T | Rejected>;
-  has(key: string): void;
-  status(key: string): 'pending' | 'fulfilled' | 'rejected' | 'unknown';
-  get(key: string): T | void;
-  remove(key: string): void;
-  clear(): void;
-  keys(): string[];
+  has (key: string): void;
+  status (key: string): 'pending' | 'fulfilled' | 'rejected' | 'unknown';
+  get (key: string): T | void;
+  remove (key: string): void;
+  clear (): void;
+  keys (): string[];
 }
 
 export class Rejected {
-  constructor(public reason: any) {}
+  constructor (public reason: any) {
+  }
 }
 
-export function memorizePromise<I extends any[], R, F extends (...args: I) => R | PromiseLike<R>>(
+export function memorizePromise<I extends any[], R, F extends (...args: I) => R | PromiseLike<R>> (
   creator: F,
   mode: MemorizeMode = 'once-success',
   getKey: (...args: I) => string = String,

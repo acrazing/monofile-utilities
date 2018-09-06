@@ -29,7 +29,7 @@ export interface SMap<T> {
 
 export type MMap<M, T> = {[K in keyof M]: T }
 
-export function createMap<T, O = AMap<T>>(initial?: O): O {
+export function createMap<T, O = AMap<T>> (initial?: O): O {
   const root: any = {};
   root['__'] = ANY;
   delete root['__'];

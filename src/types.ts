@@ -4,5 +4,7 @@
  */
 
 export type P<T> = T | Promise<T>
+export type F<T> = T | (() => T)
+export type A<T> = T | T[]
 
 export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
