@@ -3,9 +3,8 @@
  * @since 2018-06-28 22:52:35
  */
 
-import { Arguments } from 'yargs';
+import yargs, { Arguments } from 'yargs';
 import { argv, piclick } from './piclick';
-import yargs = require('yargs');
 
 export interface MainArguments extends Arguments {
 
@@ -17,16 +16,16 @@ export class Main {
       .usage('display arguments')
       .number('m').demandOption('m'),
   )
-  static main(args: MainArguments) {
+  static main (args: MainArguments) {
     console.log(args);
   }
 
-  hello() {
+  hello () {
   }
 }
 
 export class Second {
-  static hello() {
+  static hello () {
   }
 }
 

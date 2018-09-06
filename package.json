@@ -1,12 +1,29 @@
 {
   "name": "monofile-utilities",
-  "version": "1.10.0",
+  "version": "2.0.0",
   "description": "A utilities library for some misc functions.",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "author": "acrazing <joking.young@gmail.com>",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": [
+    "src/",
+    "esm/",
+    "cjs/"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.less",
+    "*.scss"
+  ],
   "scripts": {
-    "prepublishOnly": "rm -rf ./lib && tsc",
-    "test": "none"
+    "clean": "rm -rf cjs esm build temp .cache",
+    "build:esm": "tsc --outDir esm --module esnext --declaration --declarationMap",
+    "build:cjs": "tsc --outDir cjs --module commonjs --declaration --declarationMap",
+    "build": "npm run clean && run-p build:esm build:cjs",
+    "tsnode": "ts-node -O '{\"resolveJsonModule\":true,\"module\":\"commonjs\",\"target\":\"es5\"}'",
+    "prepublishOnly": "npm run build",
+    "test": "echo 'nothing to do!'"
   },
   "repository": {
     "type": "git",
@@ -21,15 +38,10 @@
     "validate",
     "nonenumerable"
   ],
-  "author": "acrazing",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/acrazing/utilities/issues"
   },
-  "files": [
-    "src/",
-    "lib/"
-  ],
   "homepage": "https://github.com/acrazing/utilities#readme",
   "dependencies": {
     "@types/lodash": "*",
@@ -41,6 +53,7 @@
     "yargs": "*"
   },
   "devDependencies": {
+    "npm-run-all": "^4.1.3",
     "typescript": "*"
   },
   "peerDependencies": {}

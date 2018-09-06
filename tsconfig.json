@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "lib": [
-      "es5",
-      "es2015",
-      "dom"
-    ],
+    // this should not be changed, for atl will use it
+    "module": "esnext",
+    "lib": ["es2018", "dom"],
     "allowJs": false,
     "jsx": "react",
-    "declaration": true,
+    "declaration": false,
+    "declarationMap": false,
     "sourceMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
@@ -31,11 +29,20 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true
+    "resolveJsonModule": false,
+    "experimentalDecorators": true,
+    "charset": "utf-8",
+    "emitBOM": false,
+    "newLine": "LF",
+    "pretty": true,
+    "allowUnreachableCode": false,
+    "stripInternal": true,
+    "allowUnusedLabels": false
   },
   "include": [
+    "./node_modules/@shimo/web-starter/base/*.d.ts",
+    "./src/**/*.d.ts",
     "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./src/**/*.d.ts"
+    "./src/**/*.tsx"
   ]
 }
