@@ -8,7 +8,6 @@ export * from './json';
 export * from './mock-list';
 export * from './indent-builder';
 export * from './sleep';
-export * from './piclick';
 export * from './storage';
 export * from './deferred';
 export * from './memorize-promise';
