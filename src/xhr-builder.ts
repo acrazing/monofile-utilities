@@ -14,9 +14,10 @@ export interface RequestOptions {
   dropQuery?: true | false | 'query' | 'body';
   contentType?: 'application/json' | 'application/x-www-form-urlencoded';
   hijackIE?: boolean;
-  handleUnexpectedStatus? (xhr: XMLHttpRequest): XhrError
-  parseResponseText? (text: string, xhr: XMLHttpRequest): any
-  handleResponseData? (data: any): any
+  handleUnexpectedStatus? (xhr: XMLHttpRequest): XhrError;
+  parseResponseText? (text: string, xhr: XMLHttpRequest): any;
+  handleResponseData? (data: any): any;
+  withCredentials?: boolean;
 }
 
 export interface XhrBuilderOptions extends RequestOptions {
@@ -95,6 +96,7 @@ export class XhrBuilder {
       return JSON.parse(text);
     },
     handleResponseData = noop,
+    withCredentials = true,
   }: XhrBuilderOptions) {
     this.host = typeof host === 'function' ? host : (url) => {
       return url.indexOf('http://') === 0 || url.indexOf('https://') === 0
@@ -108,6 +110,7 @@ export class XhrBuilder {
       handleUnexpectedStatus,
       parseResponseText,
       handleResponseData,
+      withCredentials,
     };
   }
 
@@ -136,6 +139,7 @@ export class XhrBuilder {
       parseResponseText,
       handleUnexpectedStatus,
       contentType,
+      withCredentials,
     } = { ...this.config, ...options };
     const headers = { ...this.config.headers, ...options.headers };
     const api = formatUrl(this.host(url), dropQuery);
@@ -149,7 +153,7 @@ export class XhrBuilder {
           url = appendQuery(url, { _: +new Date() });
         }
         xhr.open(method, url, true);
-        xhr.withCredentials = true;
+        xhr.withCredentials = withCredentials;
         for (const key in headers) {
           if (headers.hasOwnProperty(key)) {
             xhr.setRequestHeader(key, headers[key]);

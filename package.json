@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A utilities library for some misc functions.",
   "author": "acrazing <joking.young@gmail.com>",
   "main": "cjs/index.js",
