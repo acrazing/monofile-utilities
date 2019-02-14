@@ -6,71 +6,70 @@
 import { __assign } from 'tslib';
 import { SMap } from './map';
 
-export type MemorizeMode = 'parallel' | 'once-success' | 'once'
+export type MemorizeMode = 'parallel' | 'once-success' | 'once';
 
 export interface Memorize<T> {
   cache: SMap<Promise<T> | T | Rejected>;
-  has (key: string): void;
-  status (key: string): 'pending' | 'fulfilled' | 'rejected' | 'unknown';
-  get (key: string): T | void;
-  remove (key: string): void;
-  clear (): void;
-  keys (): string[];
+  has(key: string): void;
+  status(key: string): 'pending' | 'fulfilled' | 'rejected' | 'unknown';
+  get(key: string): T | void;
+  remove(key: string): void;
+  clear(): void;
+  keys(): string[];
 }
 
 export class Rejected {
-  constructor (public reason: any) {
-  }
+  constructor(public reason: any) {}
 }
 
-export function memorizePromise<I extends any[], R, F extends (...args: I) => R | PromiseLike<R>> (
+export function memorizePromise<
+  I extends any[],
+  R,
+  F extends (...args: I) => R | PromiseLike<R>
+>(
   creator: F,
   mode: MemorizeMode = 'once-success',
-  getKey: (...args: I) => string = String,
+  getKey: (...args: I) => string = String as any,
 ): F & MemorizeMode {
   let caches: SMap<Promise<R> | R | Rejected> = {};
   const proto: Memorize<R> = {
     cache: caches,
     has: (key) => caches.hasOwnProperty(key),
-    status: (key) => caches.hasOwnProperty(key)
-      ? caches[key] instanceof Promise
-        ? 'pending'
-        : caches[key] instanceof Rejected
+    status: (key) =>
+      caches.hasOwnProperty(key)
+        ? caches[key] instanceof Promise
+          ? 'pending'
+          : caches[key] instanceof Rejected
           ? 'rejected'
           : 'fulfilled'
-      : 'unknown',
+        : 'unknown',
     get: (key) => {
-      return !caches.hasOwnProperty(key)
-      || caches[key] instanceof Promise
-      || caches[key] instanceof Rejected
-        ? void 0 : caches[key] as R;
+      return !caches.hasOwnProperty(key) ||
+        caches[key] instanceof Promise ||
+        caches[key] instanceof Rejected
+        ? void 0
+        : (caches[key] as R);
     },
     remove: (key) => delete caches[key],
-    clear: () => caches = proto.cache = {},
+    clear: () => (caches = proto.cache = {}),
     keys: () => Object.keys(caches),
   };
   const func = (...args: I) => {
     const key = getKey(...args);
     if (!caches[key]) {
-      const ret = caches[key] = Promise.resolve(creator(...args));
+      const ret = (caches[key] = Promise.resolve(creator(...args)));
       switch (mode) {
         case 'once':
           ret.then(
-            (data) => caches[key] = data,
-            (reason) => caches[key] = new Rejected(reason),
+            (data) => (caches[key] = data),
+            (reason) => (caches[key] = new Rejected(reason)),
           );
           break;
         case 'once-success':
-          ret.then(
-            (data) => caches[key] = data,
-            () => delete caches[key],
-          );
+          ret.then((data) => (caches[key] = data), () => delete caches[key]);
           break;
         case 'parallel':
-          ret.then(
-            () => delete caches[key],
-            () => delete caches[key],
-          );
+          ret.then(() => delete caches[key], () => delete caches[key]);
           break;
       }
     }

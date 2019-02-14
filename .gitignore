@@ -1,6 +1,3 @@
-.idea/
-
-# 编译配置
 node_modules/
 .cache/
 build/
@@ -9,13 +6,17 @@ esm/
 cjs/
 lib/
 *.log
+local.*
+local-*
 *.local
 *.local.*
-*.development
-*.development.*
+/.env.development
 .DS_Store
+.DS_Store*
 *~
 .*~
 *.swp
 .*.swp
 *.tgz
+.idea/
+.vscode/

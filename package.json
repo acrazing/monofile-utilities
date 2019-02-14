@@ -1,15 +1,15 @@
 {
   "name": "monofile-utilities",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "A utilities library for some misc functions.",
   "author": "acrazing <joking.young@gmail.com>",
-  "main": "cjs/index.js",
-  "module": "esm/index.js",
-  "types": "esm/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
   "files": [
-    "src/",
-    "esm/",
-    "cjs/"
+    "assets/",
+    "lib/",
+    "src/"
   ],
   "sideEffects": [
     "*.css",
@@ -17,13 +17,19 @@
     "*.scss"
   ],
   "scripts": {
-    "clean": "rm -rf cjs esm build temp .cache",
-    "build:esm": "tsc --outDir esm --module esnext --declaration --declarationMap",
-    "build:cjs": "tsc --outDir cjs --module commonjs --declaration --declarationMap",
-    "build": "npm run clean && run-p build:esm build:cjs",
-    "tsnode": "ts-node -O '{\"resolveJsonModule\":true,\"module\":\"commonjs\",\"target\":\"es5\"}'",
-    "prepublishOnly": "npm run build",
-    "test": "echo 'nothing to do!'"
+    "build": "run-s clean && run-p build:cjs build:esm && run-s build:esm:rename build:cjs:rename",
+    "build:cjs": "tsc --outDir cjs --module commonjs -p tsconfig.build.json",
+    "build:cjs:rename": "run-p build:cjs:rename:js build:cjs:rename:map",
+    "build:cjs:rename:js": "find ./cjs -type f -name '*.js' | sed -E 's/^\\.\\/cjs\\/(.+)$/\\1/' | xargs -I % mv ./cjs/% ./lib/%",
+    "build:cjs:rename:map": "find ./cjs -type f -name '*.js.map' | sed -E 's/^\\.\\/cjs\\/(.+)$/\\1/' | xargs -I % mv ./cjs/% ./lib/%",
+    "build:esm": "tsc --outDir lib --module esnext --declaration -p tsconfig.build.json",
+    "build:esm:rename": "run-p build:esm:rename:js build:esm:rename:map",
+    "build:esm:rename:js": "find ./lib -type f -name '*.js' | sed -E 's/^(.+)\\.js$/\\1/' | xargs -I % mv %.js %.mjs",
+    "build:esm:rename:map": "find ./lib -type f -name '*.js.map' | sed -E 's/^(.+)\\.js\\.map$/\\1/' | xargs -I % mv %.js.map %.mjs.map",
+    "clean": "rm -rf cjs esm lib build temp .cache",
+    "prepublishOnly": "run-s test build",
+    "start": "npm run clean && npm run build:esm -- --watch",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -42,18 +48,67 @@
   "bugs": {
     "url": "https://github.com/acrazing/utilities/issues"
   },
-  "homepage": "https://github.com/acrazing/utilities#readme",
+  "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "husky": "^1.1.4",
+    "jest": "^23.6.0",
+    "lint-staged": "^8.0.5",
+    "npm-run-all": "^4.1.3",
+    "prettier": "^1.15.3",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.2.2"
+  },
   "dependencies": {
     "@types/lodash": "*",
     "@types/node": "*",
     "@types/yargs": "*",
     "lodash": "*",
-    "tslib": "*",
+    "tslib": "^1.9.3",
     "yargs": "*"
   },
-  "devDependencies": {
-    "npm-run-all": "^4.1.3",
-    "typescript": "*"
+  "cliVersion": "8.4.2",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
-  "peerDependencies": { }
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx,ts,tsx,json,css,less,scss,md}": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "**/assets/**/*"
+    ]
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node",
+      "mjs"
+    ],
+    "cacheDirectory": ".cache/jest",
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.{ts,tsx}",
+      "!**/*.d.ts"
+    ],
+    "coverageDirectory": "temp/coverage",
+    "globals": {
+      "__DEV__": true,
+      "ENV": {}
+    },
+    "testMatch": [
+      "<rootDir>/src/**/*.spec.{ts,tsx}"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  }
 }
