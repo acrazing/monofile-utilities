@@ -8,11 +8,18 @@
  * @desc as-map.ts
  */
 
-import { AMap } from './map';
+import { AMap, NMap, SMap } from './map';
 
-export function asMap<T> (source: T[], key: keyof T | void): AMap<T> {
+export function asMap<T, K extends keyof T, UK extends K | void> (
+  source: T[],
+  key: UK,
+): UK extends void ? T extends number ? NMap<number> : T extends string
+  ? SMap<string>
+  : never : T[K] extends number ? NMap<T> : T[K] extends string
+  ? SMap<T>
+  : never {
   if (!source) {
-    return {};
+    return {} as any;
   }
   const map: AMap<T> = {};
   if (!key) {
@@ -22,8 +29,8 @@ export function asMap<T> (source: T[], key: keyof T | void): AMap<T> {
   }
   else {
     source.forEach((item) => {
-      map[item[key] as any] = item;
+      map[item[key as K] as any] = item;
     });
   }
-  return map;
+  return map as any;
 }

@@ -7,24 +7,15 @@ build/
 temp/
 esm/
 cjs/
-
-# 日志
+lib/
 *.log
-
-# 本地环境配置
 *.local
 *.local.*
 *.development
 *.development.*
-
-# 杂项
 .DS_Store
 *~
 .*~
 *.swp
 .*.swp
 *.tgz
-
-# lock 文件
-yarn.lock
-package-lock.json

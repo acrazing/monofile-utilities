@@ -35,7 +35,7 @@ export function isFormData (value: any): value is FormData {
   return value instanceof FormData;
 }
 
-export type IsTypedArray = (value: any) => value is Int8Array | Int16Array | Int32Array | Uint8Array | Uint8ClampedArray | Uint16Array | Uint32Array | Float32Array | Float64Array
+export type IsTypedArray = (value: any) => value is (Int8Array | Int16Array | Int32Array | Uint8Array | Uint8ClampedArray | Uint16Array | Uint32Array | Float32Array | Float64Array)
 
 export const isTypedArray: IsTypedArray = (typeof Int8Array === 'function'
   ? (value: any) => {

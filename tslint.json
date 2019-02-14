@@ -1,3 +1,0 @@
-{
-  "extends": "./node_modules/@shimo/web-starter/base/tslint.json"
-}
