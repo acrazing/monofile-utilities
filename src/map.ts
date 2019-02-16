@@ -27,12 +27,24 @@ export interface SMap<T> {
   [key: string]: T;
 }
 
-export type MMap<M, T> = {[K in keyof M]: T }
+export type MMap<M, T> = { [K in keyof M]: T };
 
-export function createMap<T, O = AMap<T>> (initial?: O): O {
+export function createMap<T, O = AMap<T>>(initial?: O): O {
   const root: any = {};
   root['__'] = ANY;
   delete root['__'];
   __assign(root, initial);
   return root;
+}
+
+export function values<T extends object>(host: T, owned = true): T[keyof T][] {
+  if (owned) {
+    return Object.keys(host).map((k) => host[k as keyof T]);
+  } else {
+    const values: T[keyof T][] = [];
+    for (const key in host) {
+      values.push(host[key]);
+    }
+    return values;
+  }
 }
