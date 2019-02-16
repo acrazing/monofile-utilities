@@ -29,7 +29,7 @@ export function enumKeys<T extends object>(
 }
 
 export function createEnum<T extends object>(Host: T): Enum<T> {
-  (Host as Enum<T>).values = enumValues(Host);
-  (Host as Enum<T>).keys = enumKeys(Host);
-  return Host as Enum<T>;
+  const values = enumValues(Host);
+  const keys = enumKeys(Host);
+  return Object.assign(Host, { values, keys });
 }
