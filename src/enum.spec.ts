@@ -15,6 +15,7 @@ describe('enum', function() {
     const Foo = createEnum(_Foo);
     expect(Foo.keys).toEqual(['Number', 'String']);
     expect(Foo.values).toEqual([1, 'string']);
+    expect(Foo.labels).toEqual({ 1: 'Number', string: 'String' });
     expect(Foo.Number).toEqual(1);
     expect(Foo.String).toEqual('string');
     expect(Foo).toEqual({
@@ -22,7 +23,10 @@ describe('enum', function() {
       String: 'string',
       keys: ['Number', 'String'],
       values: [1, 'string'],
+      labels: { 1: 'Number', string: 'String' },
       1: 'Number',
     });
+    createEnum(_Foo, { 1: '1', string: 'string' });
+    expect(Foo.labels).toEqual({ 1: '1', string: 'string' });
   });
 });
