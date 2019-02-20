@@ -3,15 +3,10 @@
  * @since 2019-02-16 10:39:41
  */
 
-import { values } from './map';
+import { SMap, values } from './map';
 
 export type EnumKeys<T> = Exclude<keyof T, number>[];
 export type EnumValues<T> = T[Exclude<keyof T, number>][];
-export type Enum<T> = T & {
-  keys: EnumKeys<T>;
-  values: EnumValues<T>;
-  labels: { [P in Extract<T[keyof T], number | string>]: string };
-};
 
 export function enumValues<T>(Host: T): EnumValues<T> {
   return values(Host).filter((value) => {
@@ -25,17 +20,24 @@ export function enumKeys<T>(Host: T): EnumKeys<T> {
   }) as any[];
 }
 
-export function createEnum<T>(Host: T, labels?: Enum<T>['labels']): Enum<T> {
-  const values = enumValues(Host);
-  const keys = enumKeys(Host);
-  labels =
-    labels ||
-    keys.reduce(
-      (map, key) => {
-        (map as any)[Host[key]] = key;
-        return map;
-      },
-      {} as Enum<T>['labels'],
-    );
-  return Object.assign(Host, { values, keys, labels });
+export type EnumHost<T extends SMap<string>> = { [P in keyof T]: P } & {
+  labels: { [P in keyof T]: string };
+  values: EnumHost<T>[Exclude<keyof EnumHost<T>, 'labels' | 'values'>][];
+};
+
+export type Enum<T extends EnumHost<any>> = EnumHost<T>[Exclude<
+  keyof EnumHost<T>,
+  'labels' | 'values'
+>];
+
+export function Enum<T extends SMap<string>>(input: T): EnumHost<T> {
+  const host: EnumHost<T> = {
+    labels: {},
+    values: [],
+  } as any;
+  for (const key in input) {
+    host.labels[key] = input[key] || key;
+    host.values.push((host[key] = key as any));
+  }
+  return host;
 }

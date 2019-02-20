@@ -3,30 +3,33 @@
  * @since 2019-02-16 11:06:49
  */
 
-import { createEnum } from './enum';
+import { Enum } from './enum';
 
 describe('enum', function() {
   it('should create enum', () => {
-    enum _Foo {
-      Number = 1,
-      String = 'string',
-    }
-
-    const Foo = createEnum(_Foo);
-    expect(Foo.keys).toEqual(['Number', 'String']);
-    expect(Foo.values).toEqual([1, 'string']);
-    expect(Foo.labels).toEqual({ 1: 'Number', string: 'String' });
-    expect(Foo.Number).toEqual(1);
-    expect(Foo.String).toEqual('string');
-    expect(Foo).toEqual({
-      Number: 1,
-      String: 'string',
-      keys: ['Number', 'String'],
-      values: [1, 'string'],
-      labels: { 1: 'Number', string: 'String' },
-      1: 'Number',
+    const Foo = Enum({
+      Value: '',
+      Label: 'label',
     });
-    createEnum(_Foo, { 1: '1', string: 'string' });
-    expect(Foo.labels).toEqual({ 1: '1', string: 'string' });
+    type Foo = Enum<typeof Foo>;
+    const foo: { [P in Foo]: '' } = {
+      Value: '',
+      Label: '',
+    };
+    expect(foo).toBe(foo);
+    expect(Foo.values).toEqual(['Value', 'Label']);
+    expect(Foo.labels).toEqual({ Value: 'Value', Label: 'label' });
+    expect(Foo.Value).toEqual('Value');
+    expect(Foo.Label).toEqual('Label');
+    expect(Foo).toEqual({
+      Value: 'Value',
+      Label: 'Label',
+      labels: { Value: 'Value', Label: 'label' },
+      values: ['Value', 'Label'],
+    });
+    const fs: Foo[] = [];
+    fs.push(Foo.Label);
+    fs.push(Foo.Value);
+    fs.push(...fs);
   });
 });
