@@ -12,9 +12,13 @@ export const ANY: any = void 0;
 
 export const NULL = null;
 
-export const T_SECOND = 1e3;
-export const T_MINUTE = 60e3;
-export const T_HOUR = 36e5;
-export const T_DAY = 864e5;
+export const T_SECOND = 1000;
+export const T_MINUTE = 60000;
+export const T_HOUR = 3600000;
+export const T_DAY = 86400000;
+export const S_SECOND = 1;
+export const S_MINUTE = 60;
+export const S_HOUR = 3600;
+export const S_DAY = 86400;
 
 export const noop = () => void 0;
