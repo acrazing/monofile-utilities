@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "A utilities library for some misc functions.",
   "author": "acrazing <joking.young@gmail.com>",
   "main": "lib/index.js",
@@ -49,21 +49,21 @@
     "url": "https://github.com/acrazing/utilities/issues"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.10",
-    "husky": "^1.1.4",
-    "jest": "^23.6.0",
-    "lint-staged": "^8.0.5",
-    "npm-run-all": "^4.1.3",
-    "prettier": "^1.15.3",
-    "ts-jest": "^23.10.5",
-    "typescript": "^3.2.2"
+    "@types/jest": "^24.0.15",
+    "husky": "^3.0.0",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "@types/lodash": "*",
     "@types/node": "*",
     "@types/yargs": "*",
     "lodash": "*",
-    "tslib": "^1.9.3",
+    "tslib": "^1.10.0",
     "yargs": "*"
   },
   "cliVersion": "8.4.2",
