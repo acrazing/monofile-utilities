@@ -9,6 +9,6 @@ describe('as map', function() {
   it('should convert to map with types', () => {
     expect(asMap([1], void 0)[1]).toBe(1);
     expect(asMap(['1'], void 0)['1']).toBe('1');
-    expect(asMap([{ k: 1 }], 'k')[1]).toEqual({ k: 1 });
+    expect(asMap([{ k: 1, s: 's' }], 'k')[1]).toEqual({ k: 1, s: 's' });
   });
 });

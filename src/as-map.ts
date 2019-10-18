@@ -10,19 +10,21 @@
 
 import { AMap, NMap, SMap } from './map';
 
-export function asMap<T, K extends keyof T, UK extends K | void>(
+export function asMap<T, K extends (keyof T) | undefined>(
   source: T[],
-  key: UK,
-): UK extends void
+  key: K,
+): K extends undefined
   ? T extends number
     ? NMap<number>
     : T extends string
     ? SMap<string>
     : never
-  : T[K] extends number
-  ? NMap<T>
-  : T[K] extends string
-  ? SMap<T>
+  : K extends keyof T
+  ? T[K] extends number
+    ? NMap<T>
+    : T[K] extends string
+    ? SMap<T>
+    : never
   : never {
   if (!source) {
     return {} as any;
@@ -34,7 +36,7 @@ export function asMap<T, K extends keyof T, UK extends K | void>(
     });
   } else {
     source.forEach((item) => {
-      map[item[key as K] as any] = item;
+      map[item[key as Exclude<K, undefined>] as any] = item;
     });
   }
   return map as any;
