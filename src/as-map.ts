@@ -10,7 +10,12 @@
 
 import { AMap, NMap, SMap } from './map';
 
-export function asMap<T, K extends (keyof T) | undefined>(
+/**
+ * create a Record according to input type, cases can get in spec file
+ * @param source
+ * @param key
+ */
+export function asMap<T, K extends keyof T | undefined>(
   source: T[],
   key: K,
 ): K extends undefined

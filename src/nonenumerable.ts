@@ -8,7 +8,13 @@
  * @desc nonenumerable.ts
  */
 
-export function nonenumerable (
+/**
+ * create non-enumerable field
+ * @param p
+ * @param key
+ * @param desc
+ */
+export function nonenumerable(
   p: any,
   key: string,
   desc?: PropertyDescriptor,
@@ -19,7 +25,7 @@ export function nonenumerable (
     desc.enumerable = false;
     const { get, set } = desc;
     pValue = desc.value;
-    desc.set = function (value) {
+    desc.set = function(value) {
       set && set.call(this, value);
       if (this === p) {
         pValue = value;
@@ -29,8 +35,7 @@ export function nonenumerable (
       if (instDesc) {
         instDesc.enumerable = false;
         Object.defineProperty(this, key, instDesc);
-      }
-      else {
+      } else {
         Object.defineProperty(this, key, {
           configurable: true,
           enumerable: false,
@@ -39,7 +44,7 @@ export function nonenumerable (
         });
       }
     };
-    desc.get = function () {
+    desc.get = function() {
       return get ? get.call(this) : pValue;
     };
     return desc;
@@ -47,7 +52,7 @@ export function nonenumerable (
   return {
     enumerable: false,
     configurable: true,
-    set (value: any) {
+    set(value: any) {
       if (this === p) {
         pValue = value;
         return;
@@ -59,7 +64,7 @@ export function nonenumerable (
         value: value,
       });
     },
-    get () {
+    get() {
       return pValue;
     },
   };

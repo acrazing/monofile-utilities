@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "4.5.2",
+  "version": "4.6.0",
   "description": "A utilities library for some misc functions.",
   "author": "acrazing <joking.young@gmail.com>",
   "main": "lib/index.js",
@@ -9,8 +9,12 @@
   "files": [
     "assets/",
     "lib/",
-    "src/"
+    "src/",
+    "types/"
   ],
+  "bin": {
+    "bench": "lib/bench.js"
+  },
   "sideEffects": [
     "*.css",
     "*.less",
@@ -18,17 +22,18 @@
   ],
   "scripts": {
     "build": "run-s clean && run-p build:cjs build:esm && run-s build:esm:rename build:cjs:rename",
-    "build:cjs": "tsc --outDir cjs --module commonjs -p tsconfig.build.json",
+    "build:cjs": "tsc --outDir cjs --module commonjs --target es2015",
     "build:cjs:rename": "run-p build:cjs:rename:js build:cjs:rename:map",
     "build:cjs:rename:js": "find ./cjs -type f -name '*.js' | sed -E 's/^\\.\\/cjs\\/(.+)$/\\1/' | xargs -I % mv ./cjs/% ./lib/%",
     "build:cjs:rename:map": "find ./cjs -type f -name '*.js.map' | sed -E 's/^\\.\\/cjs\\/(.+)$/\\1/' | xargs -I % mv ./cjs/% ./lib/%",
-    "build:esm": "tsc --outDir lib --module esnext --declaration -p tsconfig.build.json",
+    "build:esm": "tsc --outDir lib --module esnext --target es5 --declaration",
     "build:esm:rename": "run-p build:esm:rename:js build:esm:rename:map",
     "build:esm:rename:js": "find ./lib -type f -name '*.js' | sed -E 's/^(.+)\\.js$/\\1/' | xargs -I % mv %.js %.mjs",
     "build:esm:rename:map": "find ./lib -type f -name '*.js.map' | sed -E 's/^(.+)\\.js\\.map$/\\1/' | xargs -I % mv %.js.map %.mjs.map",
     "clean": "rm -rf cjs esm lib build temp .cache",
     "prepublishOnly": "run-s test build",
     "start": "npm run clean && npm run build:esm -- --watch",
+    "bench": "ts-node -T -O '{\"module\":\"commonjs\",\"target\":\"esnext\"}' -C ttypescript ./src/bench.ts",
     "test": "jest"
   },
   "repository": {
@@ -45,26 +50,49 @@
     "nonenumerable"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/acrazing/utilities/issues"
-  },
   "devDependencies": {
-    "@types/jest": "^24.0.15",
-    "husky": "^3.0.0",
-    "jest": "^24.8.0",
-    "lint-staged": "^8.1.0",
+    "@types/benchmark": "^1.0.31",
+    "@types/express": "^4.17.2",
+    "@types/jest": "^24.0.23",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^12.12.9",
+    "@types/node-fetch": "^2.5.3",
+    "@types/yargs": "^13.0.3",
+    "benchmark": "^2.1.4",
+    "egoroof-blowfish": "^2.2.0",
+    "express": "^4.17.1",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.4.3",
+    "lodash": "^4.17.15",
+    "node-fetch": "^2.6.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.5.3"
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.5.2",
+    "ttypescript": "^1.5.8",
+    "typescript": "^3.7.2",
+    "yargs": "^15.0.2"
+  },
+  "peerDependencies": {
+    "@types/benchmark": "^1.0.31",
+    "@types/express": "^4.17.2",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^12.12.9",
+    "@types/node-fetch": "^2.5.3",
+    "@types/yargs": "^13.0.3",
+    "benchmark": "^2.1.4",
+    "egoroof-blowfish": "^2.2.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "node-fetch": "^2.6.0",
+    "yargs": "^15.0.2"
   },
   "dependencies": {
-    "@types/lodash": "*",
-    "@types/node": "*",
-    "@types/yargs": "*",
-    "lodash": "*",
-    "tslib": "^1.10.0",
-    "yargs": "*"
+    "tslib": "^1.10.0"
+  },
+  "bugs": {
+    "url": "https://github.com/acrazing/utilities/issues"
   },
   "cliVersion": "8.4.2",
   "husky": {
@@ -73,14 +101,9 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "*.{js,jsx,ts,tsx,json,css,less,scss,md}": [
-        "prettier --write",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "**/assets/**/*"
+    "*.{js,jsx,ts,tsx,json,css,less,scss,md}": [
+      "prettier --write",
+      "git add"
     ]
   },
   "jest": {
@@ -110,5 +133,18 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "arrowParens": "always",
+    "endOfLine": "lf"
   }
 }

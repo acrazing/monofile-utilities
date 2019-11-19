@@ -11,24 +11,39 @@
 import { __assign } from 'tslib';
 import { ANY } from './consts';
 
-// all map
+/**
+ * any map
+ *
+ * @deprecated please use Record<keyof any, T>
+ */
 export interface AMap<T> {
   [key: string]: T;
   [key: number]: T;
 }
 
-// number map
+/**
+ * @deprecated please use Record<number, T>
+ */
 export interface NMap<T> {
   [key: number]: T;
 }
 
-// string map
+/**
+ * @deprecated please use Record<string, T>
+ */
 export interface SMap<T> {
   [key: string]: T;
 }
 
+/**
+ * @deprecated please use Record<keyof M, T>
+ */
 export type MMap<M, T> = { [K in keyof M]: T };
 
+/**
+ * create a hashed table, optimized for v8 hidden class
+ * @param initial
+ */
 export function createMap<T, O = AMap<T>>(initial?: O): O {
   const root: any = {};
   root['__'] = ANY;
@@ -37,6 +52,11 @@ export function createMap<T, O = AMap<T>>(initial?: O): O {
   return root;
 }
 
+/**
+ * get typed values of object
+ * @param host
+ * @param owned
+ */
 export function values<T>(host: T, owned = true): T[keyof T][] {
   if (owned) {
     return Object.keys(host).map((k) => host[k as keyof T]);

@@ -4,12 +4,11 @@
  */
 
 import { __assign } from 'tslib';
-import { SMap } from './map';
 
 export type MemorizeMode = 'parallel' | 'once-success' | 'once';
 
 export interface Memorize<T> {
-  cache: SMap<Promise<T> | T | Rejected>;
+  cache: Record<string, Promise<T> | T | Rejected>;
   has(key: string): void;
   status(key: string): 'pending' | 'fulfilled' | 'rejected' | 'unknown';
   get(key: string): T | void;
@@ -22,6 +21,12 @@ export class Rejected {
   constructor(public reason: any) {}
 }
 
+/**
+ * memoize promise version
+ * @param creator
+ * @param mode
+ * @param getKey
+ */
 export function memorizePromise<
   I extends any[],
   R,
@@ -31,7 +36,7 @@ export function memorizePromise<
   mode: MemorizeMode = 'once-success',
   getKey: (...args: I) => string = String as any,
 ): F & MemorizeMode {
-  let caches: SMap<Promise<R> | R | Rejected> = {};
+  let caches: Record<string, Promise<R> | R | Rejected> = {};
   const proto: Memorize<R> = {
     cache: caches,
     has: (key) => caches.hasOwnProperty(key),
@@ -66,10 +71,16 @@ export function memorizePromise<
           );
           break;
         case 'once-success':
-          ret.then((data) => (caches[key] = data), () => delete caches[key]);
+          ret.then(
+            (data) => (caches[key] = data),
+            () => delete caches[key],
+          );
           break;
         case 'parallel':
-          ret.then(() => delete caches[key], () => delete caches[key]);
+          ret.then(
+            () => delete caches[key],
+            () => delete caches[key],
+          );
           break;
       }
     }

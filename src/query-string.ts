@@ -11,7 +11,11 @@
 import set from 'lodash/set';
 import { NULL } from './consts';
 
-export function parse<T> (query: string): T {
+/**
+ * parse query object deeply
+ * @param query
+ */
+export function parse<T>(query: string): T {
   if (!query) {
     return {} as any;
   }
@@ -33,7 +37,7 @@ export function parse<T> (query: string): T {
  * @param scope
  * @return {string}
  */
-export function stringify (query: any = {}, scope = ''): string {
+export function stringify(query: any = {}, scope = ''): string {
   let key: string;
   let value: any;
   let out = '';
@@ -46,8 +50,7 @@ export function stringify (query: any = {}, scope = ''): string {
     value === NULL && (value = '');
     if (typeof value === 'object') {
       out += stringify(value, key);
-    }
-    else {
+    } else {
       out += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
     }
   });
@@ -60,7 +63,7 @@ export function stringify (query: any = {}, scope = ''): string {
  * @param query
  * @return {string}
  */
-export function appendQuery (link: string, query: any) {
+export function appendQuery(link: string, query: any) {
   if (query && typeof query !== 'string') {
     query = stringify(query);
   }

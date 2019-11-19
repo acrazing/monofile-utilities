@@ -5,6 +5,12 @@
 
 import { createHash } from 'crypto';
 
+/**
+ * create a hashed password, please note this is faster than bcrypt.
+ * @param password
+ * @param algorithm
+ * @param encoding
+ */
 export function encrypt(
   password: string,
   algorithm = 'sha256',
@@ -25,6 +31,11 @@ export function encrypt(
   );
 }
 
+/**
+ * check input is correct or not
+ * @param input
+ * @param encrypted
+ */
 export function compare(input: string, encrypted: string): boolean {
   if (typeof encrypted !== 'string' || typeof input !== 'string') {
     return false;

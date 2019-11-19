@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es5",
-    // this should not be changed, for atl will use it
     "module": "esnext",
     "lib": ["es2018", "dom"],
     "allowJs": false,
@@ -23,7 +22,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
@@ -39,5 +38,5 @@
     "stripInternal": true,
     "allowUnusedLabels": false
   },
-  "include": ["./src/**/*.d.ts", "./src/**/*.ts", "./src/**/*.tsx"]
+  "include": ["./src/", "./types/"]
 }

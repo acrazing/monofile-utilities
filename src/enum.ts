@@ -1,6 +1,8 @@
 /*!
  * Copyright 2019 acrazing <joking.young@gmail.com>. All rights reserved.
  * @since 2019-02-16 10:39:41
+ *
+ * create typed enums with labels & values group
  */
 
 import { SMap, values } from './map';

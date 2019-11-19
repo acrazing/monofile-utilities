@@ -3,11 +3,14 @@
  * @since 2018-08-21 10:49:08
  */
 
-export function detectIE () {
-  if (typeof window === 'undefined' || !window.navigator || !window.navigator.userAgent) {
+/**
+ * check browser is ie or not
+ */
+export function detectIE() {
+  if (typeof navigator === 'undefined' || !navigator || !navigator.userAgent) {
     return false;
   }
-  const ua = window.navigator.userAgent;
+  const ua = navigator.userAgent;
   const MSIE = 'MSIE ';
   const msie = ua.indexOf(MSIE);
   if (msie > 0) {

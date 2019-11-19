@@ -8,7 +8,7 @@ export type TypeTree = {
 };
 
 export function createTypeTree<T extends TypeTree>(prefix: string, tree: T): T {
-  if (prefix.lastIndexOf('.') !== prefix.length - 1) {
+  if (prefix.charAt(prefix.length - 1) !== '.') {
     prefix += '.';
   }
   for (const key in tree) {
