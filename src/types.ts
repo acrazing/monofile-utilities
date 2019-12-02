@@ -70,17 +70,14 @@ export type FlatIntersection<T> = T extends any[] ? TupleIntersection<T> : T;
 
 export type Empty = {};
 
-export type TupleToRecordInner<
-  K extends string,
-  V extends { [P in K]: string }
-> = {
+export type UnionToRecord<K extends string, V extends { [P in K]: string }> = {
   [P in V[K]]: V extends { [CP in K]: P } ? V : never;
 };
 
 export type TupleToRecord<
   K extends string,
   L extends Array<{ [P in K]: string }>
-> = TupleToRecordInner<K, L[number]>;
+> = UnionToRecord<K, L[number]>;
 
 export type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X
   ? 1
