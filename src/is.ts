@@ -25,7 +25,7 @@ export const isBufferSource =
 export const isArrayBufferView =
   typeof ArrayBuffer === 'function'
     ? ArrayBuffer.isView
-    : (input: unknown): input is ArrayBuffer => false;
+    : (input: unknown): input is ArrayBufferView => false;
 export const isFormData =
   typeof FormData === 'function'
     ? (input: unknown): input is FormData => input instanceof FormData
