@@ -10,29 +10,33 @@ export const isArray = (value: unknown): value is any[] =>
 export const isDate = (value: unknown): value is Date => value instanceof Date;
 
 export const isBlob =
-  typeof Blob === 'object'
+  typeof Blob === 'function'
     ? (input: unknown): input is Blob => input instanceof Blob
     : (input: unknown): input is Blob => false;
 export const isFile =
-  typeof File === 'object'
+  typeof File === 'function'
     ? (input: unknown): input is File => input instanceof File
     : (input: unknown): input is File => false;
 export const isBufferSource =
-  typeof ArrayBuffer === 'object'
+  typeof ArrayBuffer === 'function'
     ? (input: unknown): input is BufferSource =>
         input instanceof ArrayBuffer || ArrayBuffer.isView(input)
     : (input: unknown): input is BufferSource => false;
+export const isArrayBufferView =
+  typeof ArrayBuffer === 'function'
+    ? ArrayBuffer.isView
+    : (input: unknown): input is ArrayBuffer => false;
 export const isFormData =
-  typeof FormData === 'object'
+  typeof FormData === 'function'
     ? (input: unknown): input is FormData => input instanceof FormData
     : (input: unknown): input is FormData => false;
 export const isURLSearchParams =
-  typeof URLSearchParams === 'object'
+  typeof URLSearchParams === 'function'
     ? (input: unknown): input is URLSearchParams =>
         input instanceof URLSearchParams
     : (input: unknown): input is URLSearchParams => false;
 export const isReadableStream =
-  typeof ReadableStream === 'object'
+  typeof ReadableStream === 'function'
     ? (input: unknown): input is ReadableStream =>
         input instanceof ReadableStream
     : (input: unknown): input is ReadableStream => false;
