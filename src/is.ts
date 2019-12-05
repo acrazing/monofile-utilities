@@ -37,13 +37,10 @@ export const isReadableStream =
         input instanceof ReadableStream
     : (input: unknown): input is ReadableStream => false;
 
-export function isBodyInit(input: unknown): input is BodyInit {
-  return (
-    typeof input === 'string' ||
-    isBlob(input) ||
-    isBufferSource(input) ||
-    isFormData(input) ||
-    isURLSearchParams(input) ||
-    isReadableStream(input)
-  );
-}
+export const isBodyInit = (input: unknown): input is BodyInit =>
+  typeof input === 'string' ||
+  isBlob(input) ||
+  isBufferSource(input) ||
+  isFormData(input) ||
+  isURLSearchParams(input) ||
+  isReadableStream(input);
