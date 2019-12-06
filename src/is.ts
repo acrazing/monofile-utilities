@@ -8,6 +8,9 @@ export const isObject = (value: unknown): value is object =>
 export const isArray = (value: unknown): value is any[] =>
   value instanceof Array;
 export const isDate = (value: unknown): value is Date => value instanceof Date;
+export const isError = (value: unknown): value is Error =>
+  value instanceof Error ||
+  (isObject(value) && 'name' in value && 'message' in value);
 
 export const isBlob =
   typeof Blob === 'function'
