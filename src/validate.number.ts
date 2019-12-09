@@ -3,7 +3,7 @@
  * @since 2019-12-06 22:08:17
  */
 
-import { UINT32_MAX, INT32_MAX, INT32_MIN } from './consts';
+import { INT32_MAX, INT32_MIN, UINT32_MAX } from './consts';
 
 export function only(value: number, accepts: number[]) {
   return accepts.indexOf(value) > -1;

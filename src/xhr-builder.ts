@@ -5,7 +5,7 @@
 
 import { noop } from './consts';
 import { isIE } from './detect-ie';
-import { isBlob, isFormData, isBufferSource } from './is';
+import { isBlob, isBufferSource, isFormData } from './is';
 import { SMap } from './map';
 import { appendQuery, stringify } from './query-string';
 
