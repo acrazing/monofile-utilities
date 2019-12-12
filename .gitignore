@@ -4,7 +4,8 @@ build/
 temp/
 esm/
 cjs/
-lib/
+lib/**/*.*
+!lib/*.d.ts
 *.log
 local.*
 local-*

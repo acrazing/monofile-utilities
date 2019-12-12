@@ -4,7 +4,7 @@
  */
 
 export const isObject = (value: unknown): value is object =>
-  value === Object(value);
+  typeof value === 'object' && value !== null;
 export const isArray = (value: unknown): value is any[] =>
   value instanceof Array;
 export const isDate = (value: unknown): value is Date => value instanceof Date;
