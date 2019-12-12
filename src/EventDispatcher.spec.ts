@@ -10,6 +10,7 @@ interface EventsMap {
   f1: [string];
   f2: [string, boolean];
   optional: [boolean, number?];
+  func: (name: string, value: number, options?: boolean) => void;
 }
 
 describe('EventDispatcher', () => {
@@ -31,5 +32,9 @@ describe('EventDispatcher', () => {
     dispatcher.emit('f1', 'arg1-1');
     dispatcher.off('f1');
     dispatcher.off('f0');
+    dispatcher.on('func', (name, value, options) => {
+      console.log('on.func', name, value, options);
+    });
+    dispatcher.emit('func', 'name', 1, false);
   });
 });
