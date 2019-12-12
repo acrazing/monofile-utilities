@@ -19,20 +19,23 @@ export interface EventDispatcherCallback extends Function {
 }
 
 export class EventDispatcher<M> {
-  readonly handlers: Record<keyof any, EventDispatcherCallback[]> = {};
+  /** @internal */
+  __events: Record<keyof any, EventDispatcherCallback[]>;
 
-  constructor() {}
+  constructor() {
+    this.__events = Object.create(null);
+  }
 
-  events() {
-    return Object.keys(this.handlers);
+  eventNames() {
+    return Object.keys(this.__events);
   }
 
   eventCount() {
-    return Object.keys(this.handlers).length;
+    return Object.keys(this.__events).length;
   }
 
   listenerCount(event: keyof M | keyof any) {
-    return this.handlers[event]?.length || 0;
+    return this.__events[event]?.length || 0;
   }
 
   on<K extends keyof M>(event: K, callback: EventCallback<M[K]>): void;
@@ -41,10 +44,10 @@ export class EventDispatcher<M> {
     callback: EventCallback<K extends keyof M ? M[K] : any[]>,
   ): void;
   on(event: keyof any, callback: Function) {
-    if (!this.handlers[event as string]) {
-      this.handlers[event as string] = [callback];
+    if (!this.__events[event as string]) {
+      this.__events[event as string] = [callback];
     } else {
-      this.handlers[event as string].push(callback);
+      this.__events[event as string].push(callback);
     }
   }
 
@@ -71,24 +74,24 @@ export class EventDispatcher<M> {
     callback?: EventCallback<K extends keyof M ? M[K] : any[]>,
   ): void;
   off(event: keyof any, callback?: Function) {
-    if (!this.handlers) {
+    if (!this.__events) {
       return;
     }
     if (!callback) {
-      delete this.handlers[event as string];
+      delete this.__events[event as string];
       return;
     }
     let index = 0;
     for (
-      const max = this.handlers[event as string].length;
+      const max = this.__events[event as string].length;
       index < max;
       index++
     ) {
       if (
-        this.handlers[event as string][index] === callback ||
-        this.handlers[event as string][index].__callback === callback
+        this.__events[event as string][index] === callback ||
+        this.__events[event as string][index].__callback === callback
       ) {
-        this.handlers[event as string].splice(index, 1);
+        this.__events[event as string].splice(index, 1);
         break;
       }
     }
@@ -100,7 +103,7 @@ export class EventDispatcher<M> {
     ...args: EventParams<K extends keyof M ? M[K] : any[]>
   ): void;
   emit(event: keyof any, ...args: any[]) {
-    this.handlers[event as string]?.slice().forEach((fn) => {
+    this.__events[event as string]?.slice().forEach((fn) => {
       fn(...args);
     });
   }
