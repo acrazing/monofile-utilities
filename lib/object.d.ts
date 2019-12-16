@@ -25,3 +25,4 @@ export declare function property<T>(
  * @param value
  */
 export declare function jsonReplacer(key: string, value: any): any;
+export declare function displayType(value: any): string;
