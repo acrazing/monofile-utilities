@@ -3,6 +3,8 @@
  * @since 2018-07-30 19:05:19
  */
 
+const falsy = (value: unknown): false => false;
+
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null;
 export const isArray = (value: unknown): value is any[] =>
@@ -11,6 +13,11 @@ export const isDate = (value: unknown): value is Date => value instanceof Date;
 export const isError = (value: unknown): value is Error =>
   value instanceof Error ||
   (isObject(value) && 'name' in value && 'message' in value);
+
+export const isMap =
+  typeof Map === 'function'
+    ? (value: unknown): value is Map<any, any> => value instanceof Map
+    : falsy;
 
 export const isBlob =
   typeof Blob === 'function'

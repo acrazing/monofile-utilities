@@ -6,6 +6,10 @@ export declare const isObject: (value: unknown) => value is object;
 export declare const isArray: (value: unknown) => value is any[];
 export declare const isDate: (value: unknown) => value is Date;
 export declare const isError: (value: unknown) => value is Error;
+export declare const isBigInt: (value: unknown) => value is BigInt;
+export declare const isMap:
+  | ((value: unknown) => false)
+  | ((value: unknown) => value is Map<any, any>);
 export declare const isBlob: (input: unknown) => input is Blob;
 export declare const isFile: (input: unknown) => input is File;
 export declare const isBufferSource: (input: unknown) => input is BufferSource;

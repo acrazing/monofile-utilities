@@ -18,6 +18,7 @@ export declare const S_MINUTE = 60;
 export declare const S_HOUR = 3600;
 export declare const S_DAY = 86400;
 export declare const noop: () => undefined;
+export declare const todo: () => never;
 export declare const UINT32_MAX = 4294967295;
 export declare const INT32_MIN = -2147483648;
 export declare const INT32_MAX = 2147483647;

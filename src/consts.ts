@@ -23,6 +23,10 @@ export const S_DAY = 86400;
 
 export const noop = () => void 0;
 
+export const todo = () => {
+  throw new TypeError('not implemented');
+};
+
 export const UINT32_MAX = 0xffffffff;
 export const INT32_MIN = -0x80000000;
 export const INT32_MAX = +0x7fffffff;

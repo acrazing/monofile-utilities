@@ -42,3 +42,13 @@ export function jsonReplacer(key: string, value: any) {
   }
   return value;
 }
+
+export function displayType(value: any) {
+  let type = Object.prototype.toString.call(value);
+  if (type === '[object Object]' && value) {
+    try {
+      type = `[object ${value.constructor.name}]`;
+    } catch {}
+  }
+  return type;
+}
