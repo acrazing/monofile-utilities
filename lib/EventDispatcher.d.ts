@@ -40,4 +40,20 @@ export declare class EventDispatcher<M> {
     event: K,
     ...args: EventParams<K extends keyof M ? M[K] : any[]>
   ): void;
+  emitSerial<K extends keyof M>(
+    event: K,
+    ...args: EventParams<M[K]>
+  ): Promise<void>;
+  emitSerial<K extends keyof any>(
+    event: K,
+    ...args: EventParams<K extends keyof M ? M[K] : any[]>
+  ): void;
+  emitParallel<K extends keyof M>(
+    event: K,
+    ...args: EventParams<M[K]>
+  ): Promise<any[]>;
+  emitParallel<K extends keyof any>(
+    event: K,
+    ...args: EventParams<K extends keyof M ? M[K] : any[]>
+  ): Promise<any[]>;
 }

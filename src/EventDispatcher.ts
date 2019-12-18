@@ -107,4 +107,35 @@ export class EventDispatcher<M> {
       fn(...args);
     });
   }
+
+  emitSerial<K extends keyof M>(
+    event: K,
+    ...args: EventParams<M[K]>
+  ): Promise<void>;
+  emitSerial<K extends keyof any>(
+    event: K,
+    ...args: EventParams<K extends keyof M ? M[K] : any[]>
+  ): void;
+  async emitSerial(event: keyof any, ...args: any[]) {
+    const handlers = this.__events[event as string]?.slice() ?? [];
+    for (const h of handlers) {
+      await h(...args);
+    }
+  }
+
+  emitParallel<K extends keyof M>(
+    event: K,
+    ...args: EventParams<M[K]>
+  ): Promise<any[]>;
+  emitParallel<K extends keyof any>(
+    event: K,
+    ...args: EventParams<K extends keyof M ? M[K] : any[]>
+  ): Promise<any[]>;
+  emitParallel(event: keyof any, ...args: any[]): Promise<any[]> {
+    return Promise.all(
+      this.__events[event as string]?.slice().map((fn) => {
+        return fn(...args);
+      }) ?? [],
+    );
+  }
 }
