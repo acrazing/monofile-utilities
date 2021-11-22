@@ -11,6 +11,24 @@ describe('query-string', () => {
       `${encodeURIComponent('foo[bar]')}=hello`,
     );
 
+    expect(stringify({ foo: { bar: (() => () => 1)() } })).toBe(
+      `${encodeURIComponent('foo[bar]')}=${encodeURIComponent(
+        '[Function (anonymous)]',
+      )}`,
+    );
+
+    expect(stringify({ foo: { bar: () => 1 } })).toBe(
+      `${encodeURIComponent('foo[bar]')}=${encodeURIComponent(
+        '[Function bar]',
+      )}`,
+    );
+
+    expect(stringify({ foo: { bar: function baz() {} } })).toBe(
+      `${encodeURIComponent('foo[bar]')}=${encodeURIComponent(
+        '[Function baz]',
+      )}`,
+    );
+
     expect(parse('foo[bar]=hello')).toEqual({ foo: { bar: 'hello' } });
     expect(parse(`${encodeURIComponent('foo[bar]')}=hello`)).toEqual({
       foo: { bar: 'hello' },
