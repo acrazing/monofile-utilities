@@ -1,6 +1,6 @@
 {
   "name": "monofile-utilities",
-  "version": "4.11.1",
+  "version": "5.0.0",
   "description": "A utilities library for some misc functions.",
   "author": "acrazing <joking.young@gmail.com>",
   "main": "lib/index.js",
@@ -73,11 +73,12 @@
     "ts-jest": "^25.3.1",
     "ts-node": "^8.8.2",
     "ttypescript": "^1.5.10",
-    "typescript": "^3.8.3",
+    "typescript": "^4.5.2",
     "yargs": "^15.3.1"
   },
   "dependencies": {
-    "tslib": "^1.11.1"
+    "@types/glob": "^7.2.0",
+    "tslib": "^2.3.1"
   },
   "bugs": {
     "url": "https://github.com/acrazing/utilities/issues"

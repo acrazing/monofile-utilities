@@ -36,7 +36,8 @@
     "pretty": true,
     "allowUnreachableCode": false,
     "stripInternal": true,
-    "allowUnusedLabels": false
+    "allowUnusedLabels": false,
+    "useUnknownInCatchVariables": false
   },
   "include": ["./src/", "./types/"]
 }

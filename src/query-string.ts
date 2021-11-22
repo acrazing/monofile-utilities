@@ -44,7 +44,11 @@ export function stringify(query: any = {}, scope = ''): string {
   Object.keys(query).forEach((name) => {
     key = scope ? `${scope}[${name}]` : name;
     value = query[name];
-    if (value === void 0) {
+    if (value === NULL) {
+      value = '';
+    } else if (typeof value === 'function') {
+      value = `[Function ${value.name || '(anonymous)'}]`;
+    } else if (value === void 0) {
       return;
     }
     value === NULL && (value = '');
