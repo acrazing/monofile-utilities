@@ -24,7 +24,15 @@ export function parse<T>(query: string): T {
     return out;
   }
   query.split('&').forEach((item) => {
-    const [name, value] = item.split('=', 2);
+    const eqPos = item.indexOf('=');
+    let name = '';
+    let value = '';
+    if (eqPos === -1) {
+      name = item;
+    } else {
+      name = item.substring(0, eqPos);
+      value = item.substring(eqPos + 1);
+    }
     // This will replace a.b.c/a[b][c] to {a: {b: {c: <value>}}}
     set(out, decodeURIComponent(name), decodeURIComponent(value || ''));
   });

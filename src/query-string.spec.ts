@@ -23,7 +23,13 @@ describe('query-string', () => {
       )}`,
     );
 
-    expect(stringify({ foo: { bar: function baz() {} } })).toBe(
+    expect(
+      stringify({
+        foo: {
+          bar: function baz() {},
+        },
+      }),
+    ).toBe(
       `${encodeURIComponent('foo[bar]')}=${encodeURIComponent(
         '[Function baz]',
       )}`,
@@ -33,5 +39,7 @@ describe('query-string', () => {
     expect(parse(`${encodeURIComponent('foo[bar]')}=hello`)).toEqual({
       foo: { bar: 'hello' },
     });
+
+    expect(parse('foo=bar=&baz=pat')).toEqual({ foo: 'bar=', baz: 'pat' });
   });
 });
